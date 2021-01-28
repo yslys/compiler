@@ -1,5 +1,5 @@
-class DuplicateSymException extends Exception{
-    public DuplicateSymException(){
+public class DuplicateSymException extends Exception{
+    DuplicateSymException(){
         
     }
 }
