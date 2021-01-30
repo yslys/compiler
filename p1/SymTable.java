@@ -15,7 +15,7 @@ public class SymTable{
         if(this.hashMapList.isEmpty()){
             throw new EmptySymTableException();
         }
-        else if(name.equals(null) || sym == null){
+        else if(name == null || sym == null){
             throw new IllegalArgumentException();
         }
         else if(this.hashMapList.get(0).containsKey(name)){
