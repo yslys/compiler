@@ -72,23 +72,31 @@ public class P1{
         }
 
         // test of getType()
+        // the 0th element should have type "int"
+        if(!symList.get(0).getType().equals("int")){
+            System.out.println("getType() failed");
+        }
+
+        // test of constructor
+        // the 0th and 4th element should have the same type
         if(symList.get(0).getType().equals(
             symList.get(lenSym/2-1).getType()) == false){
-            System.out.println("getType() in Sym failed");
+                System.out.println("constructor in Sym failed");
         }
 
         // test of toString()
+        // the 9th and 4th element should have different types
         if(symList.get(lenSym - 1).toString().equals(
             symList.get(lenSym/2 - 1).toString()) == true){
-            System.out.println("toString() in Sym failed");
+                System.out.println("toString() in Sym failed");
         }
 
         // combination test of getType() and toString()
         // note that this test ONLY works in P1a
         if(symList.get(lenSym/2 + 1).getType().equals(
             symList.get(lenSym/2 + 1).toString()) == false){
-            System.out.println(
-                "getType() and toString in Sym are not the same in P1a");
+                System.out.println(
+                    "getType() and toString in Sym are not the same in P1a");
         }
 
         // test of methods in SymTable
@@ -102,8 +110,9 @@ public class P1{
         // test of print() and check if constructor has done what it should do
         symTable.print();
 
+        
+
         try{
-            // test of addDecl()
             // add the given name and sym to the first HashMap in the list
             symTable.addDecl("name11", symList.get(0)); // int
             symTable.addDecl("name12", symList.get(7)); // char
@@ -111,6 +120,7 @@ public class P1{
             symTable.addDecl("nameSame", symList.get(6)); // char
 
             // use lookupLocal() to test if addDecl() worked well
+            // if any of the names cannot be found, then addDecl() failed
             if(symTable.lookupLocal("name11") == null &&
             symTable.lookupLocal("name12") == null &&
             symTable.lookupLocal("name13") == null &&
