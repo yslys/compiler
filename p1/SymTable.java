@@ -67,7 +67,7 @@ public class SymTable{
     }
 
     public void print(){
-        System.out.println("\nSym Table\n");
+        System.out.print("\nSym Table\n");
 
         for(HashMap<String, Sym> singleMap : this.hashMapList){
             System.out.println(singleMap.toString());

@@ -104,9 +104,8 @@ public class P1{
         // symTable should consist of one empty hashmap
         SymTable symTable = new SymTable();
 
-        System.out.println(
-            "-------------After calling constructor, symTable is-------------");
-        // test of print() and check if constructor has done what it should do
+        // test of print() and check if constructor has initialized an empty
+        // HashMap
         symTable.print();
 
         
@@ -158,9 +157,6 @@ public class P1{
         }
 
         // test functionality of print()
-        System.out.println(
-            "----------------------Now, the symTable is----------------------"
-        );
         symTable.print();
 
         try{
