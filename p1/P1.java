@@ -79,23 +79,23 @@ public class P1{
         // test of constructor
         // the 0th and 4th element should have the same type
         if(symList.get(0).getType().equals(
-            symList.get(lenSym/2-1).getType()) == false){
-                System.out.println("constructor in Sym failed");
+                symList.get(lenSym/2-1).getType()) == false){
+            System.out.println("constructor in Sym failed");
         }
 
         // test of toString()
         // the 9th and 4th element should have different types
         if(symList.get(lenSym - 1).toString().equals(
-            symList.get(lenSym/2 - 1).toString()) == true){
-                System.out.println("toString() in Sym failed");
+                symList.get(lenSym/2 - 1).toString()) == true){
+            System.out.println("toString() in Sym failed");
         }
 
         // combination test of getType() and toString()
         // note that this test ONLY works in P1a
         if(symList.get(lenSym/2 + 1).getType().equals(
-            symList.get(lenSym/2 + 1).toString()) == false){
-                System.out.println(
-                    "getType() and toString in Sym are not the same in P1a");
+                symList.get(lenSym/2 + 1).toString()) == false){
+            System.out.println(
+                "getType() and toString in Sym are not the same in P1a");
         }
 
         // test of methods in SymTable
@@ -119,9 +119,9 @@ public class P1{
 
             // use lookupLocal() to test if addDecl() worked well
             // if any of the names cannot be found, then addDecl() failed
-            if(symTable.lookupLocal("name11") == null &&
-            symTable.lookupLocal("name12") == null &&
-            symTable.lookupLocal("nameSame") == null){
+            if(symTable.lookupLocal("name11") == null 
+                    && symTable.lookupLocal("name12") == null 
+                    && symTable.lookupLocal("nameSame") == null){
                 System.out.println("addDecl() failed to add names");
             }
         }
@@ -144,9 +144,9 @@ public class P1{
             symTable.addDecl("nameSame", symList.get(0)); // int
 
             // use lookupLocal() to test if addDecl() worked well
-            if(symTable.lookupLocal("name21") == null &&
-            symTable.lookupLocal("name22") == null &&
-            symTable.lookupLocal("nameSame") == null){
+            if(symTable.lookupLocal("name21") == null 
+                    && symTable.lookupLocal("name22") == null 
+                    && symTable.lookupLocal("nameSame") == null){
                 System.out.println("addDecl() failed to add names");
             }
         }
@@ -281,10 +281,11 @@ public class P1{
         // If it does, then we cannot find the names in the first HashMap. 
         try{
             symTable.removeScope();
-            if(symTable.lookupGlobal("name21") != null || 
-               symTable.lookupGlobal("name22") != null ||
-               symTable.lookupGlobal("name23") != null ||
-               symTable.lookupGlobal("nameSame").getType().equals("int")){
+            if(symTable.lookupGlobal("name21") != null 
+                    || symTable.lookupGlobal("name22") != null 
+                    || symTable.lookupGlobal("name23") != null 
+                    || symTable.lookupGlobal("nameSame")
+                               .getType().equals("int")){
                 System.out.println("removeScope() failed");
             }
         }
