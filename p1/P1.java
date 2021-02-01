@@ -59,7 +59,6 @@ public class P1{
 
         // test of methods in Sym
 
-        // test of constructor
         // initialize an arraylist of Sym of length 10, with the first five of 
         // type "int", and the last five of type "char"
         ArrayList<Sym> symList = new ArrayList<Sym>();
@@ -111,51 +110,63 @@ public class P1{
         symTable.print();
 
         
-
+        // use lookupLocal() to test addDecl()
         try{
             // add the given name and sym to the first HashMap in the list
             symTable.addDecl("name11", symList.get(0)); // int
             symTable.addDecl("name12", symList.get(7)); // char
-            symTable.addDecl("name13", symList.get(7)); // char
             symTable.addDecl("nameSame", symList.get(6)); // char
 
             // use lookupLocal() to test if addDecl() worked well
             // if any of the names cannot be found, then addDecl() failed
             if(symTable.lookupLocal("name11") == null &&
             symTable.lookupLocal("name12") == null &&
-            symTable.lookupLocal("name13") == null &&
             symTable.lookupLocal("nameSame") == null){
                 System.out.println("addDecl() failed to add names");
             }
+        }
+        catch(DuplicateSymException ex){
+            System.out.println("DuplicateSymException occurs");
+        }
+        catch(EmptySymTableException ex){
+            System.out.println("EmptySymTableException occurs");
+        }
 
-            // test of addScope()
-            // add a new HashMap to the first
-            symTable.addScope();
+        // test of addScope()
+        // add a new HashMap to the first
+        symTable.addScope();
 
+        try{
             // test of addDecl()
             // add the given name and sym to the first HashMap in the list
             symTable.addDecl("name21", symList.get(7)); // char
             symTable.addDecl("name22", symList.get(0)); // int
-            symTable.addDecl("name23", symList.get(0)); // int
             symTable.addDecl("nameSame", symList.get(0)); // int
 
             // use lookupLocal() to test if addDecl() worked well
             if(symTable.lookupLocal("name21") == null &&
             symTable.lookupLocal("name22") == null &&
-            symTable.lookupLocal("name23") == null &&
             symTable.lookupLocal("nameSame") == null){
                 System.out.println("addDecl() failed to add names");
             }
+        }
+        catch(DuplicateSymException ex){
+            System.out.println("DuplicateSymException occurs");
+        }
+        catch(EmptySymTableException ex){
+            System.out.println("EmptySymTableException occurs");
+        }
 
-            // test functionality of print()
-            System.out.println(
-                "---------------------Now, the symTable is---------------------"
-            );
-            symTable.print();
+        // test functionality of print()
+        System.out.println(
+            "----------------------Now, the symTable is----------------------"
+        );
+        symTable.print();
 
+        try{
             // test if lookupLocal() checked the first HashMap
             // lookupLocal() should find ("nameSame"="int") in this case
-            // if failed, will output failure.
+            // if failed, will output an error message.
             if(!symTable.lookupLocal("nameSame").getType().equals("int")){
                 System.out.println(
                     "lookupLocal() failed to find the first HashMap in List");
@@ -163,22 +174,27 @@ public class P1{
 
             // test if lookupLocal() can find the correct key
             // lookupLocal() should find ("name21"="char") in this case
-            // if failed, will output failure.
+            // if failed, will output an error message.
             if(!symTable.lookupLocal("name21").getType().equals("char")){
                 System.out.println(
                     "lookupLocal() failed to find the first HashMap in List");
             }
 
             // test if lookupLocal() would return null when key is invalid
-            // lookupLocal() cannot find it when key is "name4"
-            // if found, will output failure.
-            if(symTable.lookupLocal("name4") != null){
+            // lookupLocal() cannot find it when key is "nameNotExist"
+            // if found, will output an error message.
+            if(symTable.lookupLocal("nameNotExist") != null){
                 System.out.println(
                     "lookupLocal() should return null in this case");
             }
-        }
-        catch(DuplicateSymException ex){
-            System.out.println("DuplicateSymException occurs");
+
+            // test if lookupLocal() would return null when the key is not in 
+            // the first HashMap
+            // if found, will output an error message.
+            if(symTable.lookupLocal("name11") != null){
+                System.out.println(
+                    "lookupLocal() should return null in this case");
+            }
         }
         catch(EmptySymTableException ex){
             System.out.println("EmptySymTableException occurs");
@@ -262,6 +278,7 @@ public class P1{
         }
 
         // test if removeScope() could successfully remove the first HashMap
+        // If it does, then we cannot find the names in the first HashMap. 
         try{
             symTable.removeScope();
             if(symTable.lookupGlobal("name21") != null || 
