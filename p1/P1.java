@@ -131,10 +131,22 @@ public class P1{
             System.out.println("EmptySymTableException occurs");
         }
 
-        // test of addScope()
-        // add a new HashMap to the first
+        // add a new, empty HashMap to the front of the symTable
         symTable.addScope();
-
+        
+        // use lookupLocal() and lookupGLobal() to test addScope()
+        // lookupLocal("name11") should return null
+        // lookupGlobal("name11") should NOT return null
+        try{
+            if(symTable.lookupLocal("name11") != null
+                    || symTable.lookupGlobal("name11") == null){
+                System.out.println("addScope() failed");
+            }
+        }
+        catch(EmptySymTableException ex){
+            System.out.println("EmptySymTableException occurs");
+        }
+        
         try{
             // test of addDecl()
             // add the given name and sym to the first HashMap in the list
