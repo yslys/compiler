@@ -1,3 +1,17 @@
+////////////////////////////////////////////////////////////////////////////////
+// 
+// Title:            P1 part1 - a symbol table
+// Files:            P1.java, Sym.java, SymTable.java, 
+//                   DuplicateSymException.java, EmptySymTableException.java
+// Semester:         CS 536 Spring 2021
+//
+// Author:           Yusen Liu
+// Email:            liu797@wisc.edu
+// CS Login:         yusen
+// Lecturer's Name:  Loris D'Antoni
+//
+////////////////////////////////////////////////////////////////////////////////
+
 import java.util.*;
 
 
@@ -133,7 +147,7 @@ public class P1{
 
         // add a new, empty HashMap to the front of the symTable
         symTable.addScope();
-        
+
         // use lookupLocal() and lookupGLobal() to test addScope()
         // lookupLocal("name11") should return null
         // lookupGlobal("name11") should NOT return null
