@@ -21,15 +21,15 @@
 
 public class Sym{
 
-    /** The type of the symbol */
-    String type;
+    /** The private field indicating the type of the symbol */
+    private String type;
   
     /**
      * Constructor: Requires a specified type
      * It initializes the Sym to have the given type.
      * @param type The type of the symbol.
      */
-    Sym(String type){
+    public Sym(String type){
       this.type = type;
     }
   

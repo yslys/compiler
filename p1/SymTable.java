@@ -41,7 +41,7 @@ public class SymTable{
      * It initializes the SymTable's hashMapList field to contain a single, 
      * empty HashMap.
      */
-    SymTable(){
+    public SymTable(){
         this.hashMapList = new LinkedList<HashMap<String, Sym>>();
         this.hashMapList.add(0, new HashMap<String, Sym>());
     }
