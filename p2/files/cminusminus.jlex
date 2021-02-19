@@ -57,6 +57,7 @@ class CharNum {
 %%
 
 DIGIT=        [0-9]
+LETTER=       [a-zA-Z]
 SPACE=        [\040\t]
 
 %implements java_cup.runtime.Scanner
@@ -71,8 +72,113 @@ return new Symbol(sym.EOF);
 
 %%
 
-{DIGIT}+  { // NOTE: the following computation of the integer value does NOT
-            //       check for overflow.  This must be modified.
+// reserved words
+// bool  int   void  true  false  struct
+// cin   cout  if    else  while  return  
+"bool"    {
+            Symbol s = new Symbol(sym.BOOL, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+"int"     {
+            symbol s = new Symbol(sym.INT, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+"void"    {
+            symbol s = new Symbol(sym.VOID, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+"true"    {
+            symbol s = new Symbol(sym.TRUE, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+"false"   {
+            symbol s = new Symbol(sym.FALSE, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+"struct"  {
+            symbol s = new Symbol(sym.STRUCT, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+"cin"     {
+            symbol s = new Symbol(sym.CIN, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+"cout"    {
+            symbol s = new Symbol(sym.COUT, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+"if"      {
+            symbol s = new Symbol(sym.IF, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+"else"    {
+            symbol s = new Symbol(sym.ELSE, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+"while"   {
+            symbol s = new Symbol(sym.WHILE, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+"return"  {
+            symbol s = new Symbol(sym.RETURN, new TokenVal(yyline+1, CharNum.num));
+            CharNum.num += yytext().length();
+            return s;
+          }
+
+// identifier 
+// (a seq of >=1 letters and/or digits, and/or underscores, starting with a 
+//  letter or underscore, excluding reserved words)
+// Note that: we have defined the reserved words already, so no need to exclude 
+//            here.
+({LETTER}|_)+({LETTER}|{DIGIT}|_)*  {
+    Symbol s = new Symbol(sym.ID, new IdTokenVal(yyline+1, CharNum.num, yytext()));
+    CharNum.num += yytext().length();
+    return s;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// an integer literal
+// (a seq of >=1 digits)
+{DIGIT}+  { // check for overflow
+            double d = Integer.parseDouble(yytext());
+            if(d < Integer.MIN_VALUE || d > Integer.MAX_VALUE){
+                ErrMsg.warn(yyline+1, CharNum.num, 
+                        "integer literal too large; using max value");
+                CharNum.num += yytext().length();
+                return Integer.MAX_VALUE;
+            }
             int val = Integer.parseInt(yytext());
             Symbol s = new Symbol(sym.INTLITERAL,
                              new IntLitTokenVal(yyline+1, CharNum.num, val));
@@ -88,7 +194,28 @@ return new Symbol(sym.EOF);
             CharNum.num++;
             return s;
           }
-        
+
+
+
+
+
+
+\"(  (\\[n|t|'|(\")|(\\)|?])  |  [^\n\"\\]  )*  (\n)?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .         { ErrMsg.fatal(yyline+1, CharNum.num,
                          "ignoring illegal character: " + yytext());
             CharNum.num++;
