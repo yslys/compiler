@@ -56,9 +56,35 @@ class CharNum {
 }
 %%
 
-DIGIT=        [0-9]
-LETTER=       [a-zA-Z]
-SPACE=        [\040\t]
+
+
+DIGIT=               [0-9]
+LETTER=              [a-zA-Z]
+SPACE=               [\040\t]
+
+// The use of the word "escape" really means to temporarily escape out of 
+// parsing the text and into a another mode where the subsequent character is 
+// treated differently.
+// Note that:
+//      \' - matches the empty string, but only at the end of the string or 
+//           buffer (or its accessible portion) being matched against.
+//      \n can be interpreted as 2 ways:
+            i) a 2-char string with 1st_char='\', 2nd_char='n' => regexp = [\\n]
+           ii) a character meaning "newline"                   => regexp = [\n]
+// Links: https://stackoverflow.com/questions/7392388/how-to-specify-single-\
+//        quote-in-regular-expression
+//        https://emacs.stackexchange.com/questions/45382/elisp-regex-newline-\
+//        escape-confusion
+ESCAPECHAR = [\\][nt'\"?\\]
+
+// string character
+// (either an escaped character: \n, \t, \', \", \?, \\
+//  or     a single character other than new line or double quote or backslash)
+STRINGCHAR = ({ESCAPECHAR}|([^\n\"\\]))+
+
+
+
+
 
 %implements java_cup.runtime.Scanner
 %function next_token
@@ -153,38 +179,56 @@ return new Symbol(sym.EOF);
 // Note that: we have defined the reserved words already, so no need to exclude 
 //            here.
 ({LETTER}|_)+({LETTER}|{DIGIT}|_)*  {
-    Symbol s = new Symbol(sym.ID, new IdTokenVal(yyline+1, CharNum.num, yytext()));
-    CharNum.num += yytext().length();
-    return s;
+            Symbol s = new Symbol(sym.ID, 
+                               new IdTokenVal(yyline+1, CharNum.num, yytext()));
+            CharNum.num += yytext().length();
+            return s;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-// an integer literal
+// integer literal
 // (a seq of >=1 digits)
-{DIGIT}+  { // check for overflow
-            double d = Integer.parseDouble(yytext());
+{DIGIT}+  {
+            double d = Double.parseDouble(yytext());
+            int val = 0;
+            
+            // check for overflow
             if(d < Integer.MIN_VALUE || d > Integer.MAX_VALUE){
                 ErrMsg.warn(yyline+1, CharNum.num, 
                         "integer literal too large; using max value");
-                CharNum.num += yytext().length();
-                return Integer.MAX_VALUE;
+                val = Integer.MAX_VALUE;
             }
-            int val = Integer.parseInt(yytext());
+            else{
+                val = Integer.parseInt(yytext());
+            }
+            
             Symbol s = new Symbol(sym.INTLITERAL,
-                             new IntLitTokenVal(yyline+1, CharNum.num, val));
+                            new IntLitTokenVal(yyline+1, CharNum.num, val));
             CharNum.num += yytext().length();
             return s;
           }
+
+// string literal 
+// (a seq of >=0 string characters surrounded by double quotes)
+[\"]{STRINGCHAR}*[\"] {
+            Symbol s = new Symbol(sym.STRINGLITERAL, 
+                            new StrLitTokenVal(yyline+1, CharNum.num, yytext());
+            CharNum.num += yytext().length();
+            return s;
+}
+
+// unterminated string literal
+// (there is a newline or end-of-file before the closing quote)
+
+
+
+
+
+
+
+
+
+
+
 
 \n        { CharNum.num = 1; }
 
