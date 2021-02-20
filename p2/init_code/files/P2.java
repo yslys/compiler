@@ -13,7 +13,7 @@ public class P2 {
                                            // exception may be thrown by yylex
         // test all tokens
         testAllTokens();
-        //CharNum.num = 1;
+        CharNum.num = 1;
     
         // ADD CALLS TO OTHER TEST METHODS HERE
     }
