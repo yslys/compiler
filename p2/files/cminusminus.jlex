@@ -62,6 +62,7 @@ DIGIT=               [0-9]
 LETTER=              [a-zA-Z]
 SPACE=               [\040\t]
 
+// escape character: \n, \t, \', \", \?, \\
 // The use of the word "escape" really means to temporarily escape out of 
 // parsing the text and into a another mode where the subsequent character is 
 // treated differently.
@@ -75,12 +76,16 @@ SPACE=               [\040\t]
 //        quote-in-regular-expression
 //        https://emacs.stackexchange.com/questions/45382/elisp-regex-newline-\
 //        escape-confusion
-ESCAPECHAR = [\\][nt'\"?\\]
+ESCAPE_CHAR = [\\][nt'\"?\\]
+BAD_ESCAPE_CHAR = [\\][^nt'\"?\\]
+
+// a single character other than new line or double quote or backslash
+SINGLE_CHAR = [^\n\"\\]
 
 // string character
 // (either an escaped character: \n, \t, \', \", \?, \\
 //  or     a single character other than new line or double quote or backslash)
-STRINGCHAR = ({ESCAPECHAR}|([^\n\"\\]))+
+STRING_CHAR = {ESCAPE_CHAR}|{SINGLE_CHAR}
 
 
 
@@ -178,7 +183,7 @@ return new Symbol(sym.EOF);
 //  letter or underscore, excluding reserved words)
 // Note that: we have defined the reserved words already, so no need to exclude 
 //            here.
-({LETTER}|_)+({LETTER}|{DIGIT}|_)*  {
+({LETTER}|_)+({LETTER}|{DIGIT}|_)* {
             Symbol s = new Symbol(sym.ID, 
                                new IdTokenVal(yyline+1, CharNum.num, yytext()));
             CharNum.num += yytext().length();
@@ -209,7 +214,7 @@ return new Symbol(sym.EOF);
 
 // string literal 
 // (a seq of >=0 string characters surrounded by double quotes)
-[\"]{STRINGCHAR}*[\"] {
+[\"]{STRING_CHAR}*[\"] {
             Symbol s = new Symbol(sym.STRINGLITERAL, 
                             new StrLitTokenVal(yyline+1, CharNum.num, yytext());
             CharNum.num += yytext().length();
@@ -218,12 +223,38 @@ return new Symbol(sym.EOF);
 
 // unterminated string literal
 // (there is a newline or end-of-file before the closing quote)
+// ignore the unterminated Str Lit (start looking for the next token after the newline)
+// ***so this regexp must keep reading all SINGLE_CHARs***
+[\"]{STRING_CHAR}*{SINGLE_CHAR}* {
+            ErrMsg.fatal(yyline+1, CharNum.num, 
+                    "unterminated string literal ignored");
+            CharNum.num = 1;
+}
 
+// bad string literal
+// (includes a bad escaped char AND not terminated)
+// ignore the Bad Str Lit (start looking for the next token after the closing quote)
+// ***so this regexp must keep reading all SINGLE_CHARs*** 
+[\"]({STRING_CHAR}*{BAD_ESCAPE_CHAR})+{SINGLE_CHAR}* {
+            ErrMsg.fatal(yyline+1, CharNum.num,
+                    "unterminated string literal with bad escaped character ignored");
+            CharNum.num = 1;
+}
 
+// bad string literal
+// terminated, but includes a bad escaped char
+// after reading the single escaped char, keep reading until a double quote
+[\"]({STRING_CHAR}*{BAD_ESCAPE_CHAR})+({SINGLE_CHAR}*)[\"] {
+            ErrMsg.fatal(yyline + 1, CharNum.num, 
+                    "string literal with bad escaped character ignored");
+            CharNum.num = 1;
+}
 
-
-
-
+// {      }      (      )      ;      
+// ,      .      <<     >>     ++
+// --     +      -      *      /
+// !      &&     ||     ==     !=
+// <      >      <=     >=     =
 
 
 
@@ -238,27 +269,6 @@ return new Symbol(sym.EOF);
             CharNum.num++;
             return s;
           }
-
-
-
-
-
-
-\"(  (\\[n|t|'|(\")|(\\)|?])  |  [^\n\"\\]  )*  (\n)?
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .         { ErrMsg.fatal(yyline+1, CharNum.num,
                          "ignoring illegal character: " + yytext());
