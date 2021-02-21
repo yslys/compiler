@@ -228,160 +228,134 @@ return new Symbol(sym.EOF);
             CharNum.num = 1;
 }
 
-"<<" {
-    Symbol S = new Symbol(sym.WRITE, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
 
-">>" {
-    Symbol S = new Symbol(sym.READ, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
+"{"     { Symbol s = new Symbol(sym.LCURLY, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        } 
+          
+"}"     { Symbol s = new Symbol(sym.RCURLY, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        } 
+ 
+"("     { Symbol s = new Symbol(sym.LPAREN, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        }        
+         
+")"     { Symbol s = new Symbol(sym.RPAREN, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        }
+         
+";"     { Symbol s = new Symbol(sym.SEMICOLON, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        }
+         
+","     { Symbol s = new Symbol(sym.COMMA, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        } 
+         
+"."     { Symbol s = new Symbol(sym.DOT, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        }
+         
+"<<"    { Symbol s = new Symbol(sym.WRITE, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 2;
+          return s;
+        }
+         
+">>"    { Symbol s = new Symbol(sym.READ, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 2;
+          return s;
+        }  
+         
+"++"    { Symbol s = new Symbol(sym.PLUSPLUS, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 2;
+          return s;
+        }  
+         
+"--"    { Symbol s = new Symbol(sym.PLUSPLUS, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 2;
+          return s;
+        }
 
-"++" {
-    Symbol S = new Symbol(sym.PLUSPLUS, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
+"+"     { Symbol s = new Symbol(sym.PLUS, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num++;
+          return s;
+        }
+         
+"-"     { Symbol s = new Symbol(sym.MINUS, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        }
+         
+"*"     { Symbol s = new Symbol(sym.TIMES, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        }   
+         
+"/"     { Symbol s = new Symbol(sym.DIVIDE, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        } 
+         
+"!"     { Symbol s = new Symbol(sym.NOT, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        } 
+         
+"&&"    { Symbol s = new Symbol(sym.AND, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 2;
+          return s;
+        } 
+         
+"||"    { Symbol s = new Symbol(sym.OR, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 2;
+          return s;
+        }
+         
+"=="    { Symbol s = new Symbol(sym.EQUALS, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 2;
+          return s;
+        }   
+         
+"!="    { Symbol s = new Symbol(sym.NOTEQUALS, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 2;
+          return s;
+        } 
+         
+"<"     { Symbol s = new Symbol(sym.LESS, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        } 
+         
+">"     { Symbol s = new Symbol(sym.GREATER, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        } 
+       
+"<="    { Symbol s = new Symbol(sym.LESSEQ, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 2;
+          return s;
+        } 
+         
+">="    { Symbol s = new Symbol(sym.GREATEREQ, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 2;
+          return s;
+        } 
+         
+"="     { Symbol s = new Symbol(sym.ASSIGN, new TokenVal(yyline+1, CharNum.num));
+          CharNum.num += 1;
+          return s;
+        }   
 
-"--" {
-    Symbol S = new Symbol(sym.MINUSMINUS, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
 
-"&&" {
-    Symbol S = new Symbol(sym.AND, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-
-"||" {
-    Symbol S = new Symbol(sym.OR, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"==" {
-    Symbol S = new Symbol(sym.EQUALS, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"!=" {
-    Symbol S = new Symbol(sym.NOTEQUALS, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"<=" {
-    Symbol S = new Symbol(sym.LESSEQ, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-">=" {
-    Symbol S = new Symbol(sym.GREATEREQ, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"{" {
-    Symbol S = new Symbol(sym.LCURLY, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"}" {
-    Symbol S = new Symbol(sym.RCURLY, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"(" {
-    Symbol S = new Symbol(sym.LPAREN, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-")" {
-    Symbol S = new Symbol(sym.RPAREN, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-";" {
-    Symbol S = new Symbol(sym.SEMICOLON, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"," {
-    Symbol S = new Symbol(sym.COMMA, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"." {
-    Symbol S = new Symbol(sym.DOT, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"+"       { Symbol s = new Symbol(sym.PLUS, new TokenVal(yyline+1, CharNum.num));
-            CharNum.num++;
-            return s;
-          }
-
-"-" {
-    Symbol s = new Symbol(sym.MINUS, new TokenVal(yyline+1, CharNum.num));
-    CharNum.num += yytext().length();
-    return s;
-}
-
-"*" {
-    Symbol S = new Symbol(sym.TIMES, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"/" {
-    Symbol S = new Symbol(sym.DIVIDE, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"!" {
-    Symbol S = new Symbol(sym.NOT, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"<" {
-    Symbol S = new Symbol(sym.LESS, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-">" {
-    Symbol S = new Symbol(sym.GREATER, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-"=" {
-    Symbol S = new Symbol(sym.ASSIGN, new TokenVal(yyline + 1, CharNum.num));
-    CharNum.num += yytext().length();
-    return S;
-}
-
-(([/][/])|[#])([^\n])* 
-	 {// Comments, ignore
-	         CharNum.num += yytext().length();
-	 }
+((//)|(##))[^\n]*  { CharNum.num = 1; }
 
 \n        { CharNum.num = 1; }
 
@@ -389,7 +363,7 @@ return new Symbol(sym.EOF);
 
 
 
-.         { ErrMsg.fatal(yyline+1, CharNum.num,
+.       { ErrMsg.fatal(yyline+1, CharNum.num,
                          "ignoring illegal character: " + yytext());
-            CharNum.num++;
-          }
+          CharNum.num++;
+        }
