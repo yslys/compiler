@@ -13,9 +13,133 @@ public class P2 {
                                            // exception may be thrown by yylex
         // test all tokens
         testAllTokens();
-        //CharNum.num = 1;
+        CharNum.num = 1;
     
-        // ADD CALLS TO OTHER TEST METHODS HERE
+        // test indentifier tokens
+        testIDTokens();
+        CharNum.num = 1;
+
+        // test integer literals tokens
+        testIntTokens();
+        CharNum.num = 1;
+
+        // test string literals tokens
+        testStrTokens();
+        CharNum.num = 1;
+    }
+
+    /**
+     * testIdentifier
+     *
+     * Open and read from file identifierTokens.txt
+     * For each token read, write the corresponding string to identifierTokens.out
+     * If the input file contains all tokens, one per line, we can verify
+     * correctness of the scanner by comparing the input and output files
+     * (e.g., using a 'diff' command).
+     */
+    private static void testIDTokens() throws IOException {
+        // open input and output files
+        FileReader inFile = null;
+        PrintWriter outFile = null;
+        try {
+            inFile = new FileReader("IDTokens.in");
+            outFile = new PrintWriter(new FileWriter("IDTokens.out"));
+        } catch (FileNotFoundException ex) {
+            System.err.println("File IDTokens.in not found.");
+            System.exit(-1);
+        } catch (IOException ex) {
+            System.err.println("IDTokens.out cannot be opened.");
+            System.exit(-1);
+        }
+
+        // create and call the scanner
+        Yylex scanner = new Yylex(inFile);
+        Symbol token = scanner.next_token();
+        while (token.sym != sym.EOF) {
+            if(token.sym == sym.ID){
+                outFile.println(((IdTokenVal)token.value).idVal + "  " + 
+                                ((IdTokenVal)token.value).linenum + "  " + 
+                                ((IdTokenVal)token.value).charnum);
+            }
+            token = scanner.next_token();
+        } // end while
+        outFile.close();
+    }
+
+    /**
+     * testIdentifier
+     *
+     * Open and read from file identifierTokens.txt
+     * For each token read, write the corresponding string to identifierTokens.out
+     * If the input file contains all tokens, one per line, we can verify
+     * correctness of the scanner by comparing the input and output files
+     * (e.g., using a 'diff' command).
+     */
+    private static void testIntTokens() throws IOException {
+        // open input and output files
+        FileReader inFile = null;
+        PrintWriter outFile = null;
+        try {
+            inFile = new FileReader("IntLitTokens.in");
+            outFile = new PrintWriter(new FileWriter("IntLitTokens.out"));
+        } catch (FileNotFoundException ex) {
+            System.err.println("File IntLitTokens.in not found.");
+            System.exit(-1);
+        } catch (IOException ex) {
+            System.err.println("IntLitTokens.out cannot be opened.");
+            System.exit(-1);
+        }
+
+        // create and call the scanner
+        Yylex scanner = new Yylex(inFile);
+        Symbol token = scanner.next_token();
+        while (token.sym != sym.EOF) {
+            if(token.sym == sym.INTLITERAL){
+                outFile.println(((IntLitTokenVal)token.value).intVal + "  " + 
+                                ((IntLitTokenVal)token.value).linenum + "  " + 
+                                ((IntLitTokenVal)token.value).charnum);
+            }
+            token = scanner.next_token();
+        } // end while
+        outFile.close();
+    }
+
+    /**
+     * testIdentifier
+     *
+     * Open and read from file identifierTokens.txt
+     * For each token read, write the corresponding string to identifierTokens.out
+     * If the input file contains all tokens, one per line, we can verify
+     * correctness of the scanner by comparing the input and output files
+     * (e.g., using a 'diff' command).
+     */
+    private static void testStrTokens() throws IOException {
+        // open input and output files
+        FileReader inFile = null;
+        PrintWriter outFile = null;
+        try {
+            inFile = new FileReader("StrLitTokens.in");
+            outFile = new PrintWriter(new FileWriter("StrLitTokens.out"));
+        } catch (FileNotFoundException ex) {
+            System.err.println("File StrLitTokens.in not found.");
+            System.exit(-1);
+        } catch (IOException ex) {
+            System.err.println("StrLitTokens.out cannot be opened.");
+            System.exit(-1);
+        }
+
+        // create and call the scanner
+        Yylex scanner = new Yylex(inFile);
+        Symbol token = scanner.next_token();
+        while (token.sym != sym.EOF) {
+            if(token.sym == sym.STRINGLITERAL){
+                outFile.println(((StrLitTokenVal)token.value).strVal + "  " + 
+                                ((StrLitTokenVal)token.value).linenum + "  " + 
+                                ((StrLitTokenVal)token.value).charnum);
+            }
+            token = scanner.next_token();
+        } // end while
+        outFile.close();
     }
 
     /**
@@ -48,7 +172,8 @@ public class P2 {
         while (token.sym != sym.EOF) {
             switch (token.sym) {
             case sym.BOOL:
-                outFile.println("bool"); 
+                outFile.println("bool" + "  " + ((TokenVal)token.value).linenum 
+                                + "  " + ((TokenVal)token.value).charnum); 
                 break;
             case sym.INT:
                 outFile.println("int");
