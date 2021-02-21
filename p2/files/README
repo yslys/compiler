@@ -1,0 +1,26 @@
+// escape character: n, t, ', ", ?, backslash
+// The use of the word "escape" really means to temporarily escape out of 
+// parsing the text and into a another mode where the subsequent character is 
+// treated differently.
+// Note that:
+//      \' - matches the empty string, but only at the end of the string or 
+//           buffer (or its accessible portion) being matched against.
+//      \n can be interpreted as 2 ways:
+//          i) a 2-char string with 1st_char='\', 2nd_char='n' => regexp = [\\n]
+//         ii) a character meaning "newline"                   => regexp = [\n]
+// Links: https://stackoverflow.com/questions/7392388/how-to-specify-single-\
+//        quote-in-regular-expression
+//        https://emacs.stackexchange.com/questions/45382/elisp-regex-newline-\
+//        escape-confusion
+ESCAPECHAR = [\\][nt'\"?\\]
+BADESCAPECHAR = [\\][^nt'\"?\\]
+
+// a single character other than new line or double quote or backslash
+SINGLECHAR = [^\n\"\\]
+
+// string character
+// (either an escaped character: \n, \t, \', \", \?, \\
+//  or     a single character other than new line or double quote or backslash)
+STRINGCHAR = ([\\][nt'\"?\\])|([^\n\"\\])
+
+java -cp ./deps:. P2 2> errors.out

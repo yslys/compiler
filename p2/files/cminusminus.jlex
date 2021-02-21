@@ -62,18 +62,10 @@ DIGIT=               [0-9]
 LETTER=              [a-zA-Z]
 SPACE=               [\040\t]
 
-
 ESCAPE_CHAR = [\\][nt'\"?\\]
 BAD_ESCAPE_CHAR = [\\][^nt'\"?\\]
-
-
 SINGLE_CHAR = [^\n\"\\]
-
-
 STRING_CHAR = {ESCAPE_CHAR}|{SINGLE_CHAR}
-
-
-
 
 
 %implements java_cup.runtime.Scanner
@@ -193,7 +185,7 @@ return new Symbol(sym.EOF);
                             new IntLitTokenVal(yyline+1, CharNum.num, val));
             CharNum.num += yytext().length();
             return s;
-          }
+          }   
 
 [\"]{STRING_CHAR}*[\"] {
             // string literal 
@@ -204,7 +196,7 @@ return new Symbol(sym.EOF);
             return s;
 }
 
-[\"]({STRING_CHAR})*({SINGLE_CHAR})* {
+[\"]({STRING_CHAR})* {
             // unterminated string literal
             // (there is a newline or end-of-file before the closing quote)
             // ignore the unterminated Str Lit (start looking for the next token 
@@ -215,7 +207,7 @@ return new Symbol(sym.EOF);
             CharNum.num = 1;
 }
 
-[\"]({STRING_CHAR}*{BAD_ESCAPE_CHAR})+{SINGLE_CHAR}* {
+[\"](({STRING_CHAR})*{BAD_ESCAPE_CHAR}({STRING_CHAR})*)+ {
             // bad string literal
             // (includes a bad escaped char AND not terminated)
             // ignore the Bad Str Lit (start looking for the next token after 
@@ -226,7 +218,7 @@ return new Symbol(sym.EOF);
             CharNum.num = 1;
 }
 
-[\"]({STRING_CHAR}*{BAD_ESCAPE_CHAR})+({SINGLE_CHAR}*)[\"] {
+[\"]({STRING_CHAR}*{BAD_ESCAPE_CHAR}{STRING_CHAR}*)+[\"] {
             // bad string literal
             // terminated, but includes a bad escaped char
             // after reading the single escaped char, keep reading until a double 
