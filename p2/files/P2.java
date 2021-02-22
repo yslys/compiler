@@ -12,135 +12,139 @@ public class P2 {
     public static void main(String[] args) throws IOException {
                                            // exception may be thrown by yylex
         // test all tokens
-        testAllTokens();
+        testAllTokens("testAllTokens.in", "testAllTokens.out");
         CharNum.num = 1;
     
         // test indentifier tokens
-        testIDTokens();
+        testAllTokens("testIDTokens.in", "testIDTokens.out");
         CharNum.num = 1;
 
         // test integer literals tokens
-        testIntTokens();
+        testAllTokens("testIntLitTokens.in", "testIntLitTokens.out");
         CharNum.num = 1;
 
         // test string literals tokens
-        testStrTokens();
+        testAllTokens("testStrLitTokens.in", "testStrLitTokens.out");
+        CharNum.num = 1;
+
+        // test EOF
+        testAllTokens("testEOF.txt", "testEOF.out");
         CharNum.num = 1;
     }
 
-    /**
-     * testIdentifier
-     *
-     * Open and read from file identifierTokens.txt
-     * For each token read, write the corresponding string to identifierTokens.out
-     * If the input file contains all tokens, one per line, we can verify
-     * correctness of the scanner by comparing the input and output files
-     * (e.g., using a 'diff' command).
-     */
-    private static void testIDTokens() throws IOException {
-        // open input and output files
-        FileReader inFile = null;
-        PrintWriter outFile = null;
-        try {
-            inFile = new FileReader("IDTokens.in");
-            outFile = new PrintWriter(new FileWriter("IDTokens.out"));
-        } catch (FileNotFoundException ex) {
-            System.err.println("File IDTokens.in not found.");
-            System.exit(-1);
-        } catch (IOException ex) {
-            System.err.println("IDTokens.out cannot be opened.");
-            System.exit(-1);
-        }
+    // /**
+    //  * testIdentifier
+    //  *
+    //  * Open and read from file identifierTokens.txt
+    //  * For each token read, write the corresponding string to identifierTokens.out
+    //  * If the input file contains all tokens, one per line, we can verify
+    //  * correctness of the scanner by comparing the input and output files
+    //  * (e.g., using a 'diff' command).
+    //  */
+    // private static void testIDTokens() throws IOException {
+    //     // open input and output files
+    //     FileReader inFile = null;
+    //     PrintWriter outFile = null;
+    //     try {
+    //         inFile = new FileReader("IDTokens.in");
+    //         outFile = new PrintWriter(new FileWriter("IDTokens.out"));
+    //     } catch (FileNotFoundException ex) {
+    //         System.err.println("File IDTokens.in not found.");
+    //         System.exit(-1);
+    //     } catch (IOException ex) {
+    //         System.err.println("IDTokens.out cannot be opened.");
+    //         System.exit(-1);
+    //     }
 
-        // create and call the scanner
-        Yylex scanner = new Yylex(inFile);
-        Symbol token = scanner.next_token();
-        while (token.sym != sym.EOF) {
-            if(token.sym == sym.ID){
-                outFile.println(((IdTokenVal)token.value).idVal + "  " + 
-                                ((IdTokenVal)token.value).linenum + "  " + 
-                                ((IdTokenVal)token.value).charnum);
-            }
-            token = scanner.next_token();
-        } // end while
-        outFile.close();
-    }
+    //     // create and call the scanner
+    //     Yylex scanner = new Yylex(inFile);
+    //     Symbol token = scanner.next_token();
+    //     while (token.sym != sym.EOF) {
+    //         if(token.sym == sym.ID){
+    //             outFile.println(((IdTokenVal)token.value).idVal + "  " + 
+    //                             ((IdTokenVal)token.value).linenum + "  " + 
+    //                             ((IdTokenVal)token.value).charnum);
+    //         }
+    //         token = scanner.next_token();
+    //     } // end while
+    //     outFile.close();
+    // }
 
-    /**
-     * testIdentifier
-     *
-     * Open and read from file identifierTokens.txt
-     * For each token read, write the corresponding string to identifierTokens.out
-     * If the input file contains all tokens, one per line, we can verify
-     * correctness of the scanner by comparing the input and output files
-     * (e.g., using a 'diff' command).
-     */
-    private static void testIntTokens() throws IOException {
-        // open input and output files
-        FileReader inFile = null;
-        PrintWriter outFile = null;
-        try {
-            inFile = new FileReader("IntLitTokens.in");
-            outFile = new PrintWriter(new FileWriter("IntLitTokens.out"));
-        } catch (FileNotFoundException ex) {
-            System.err.println("File IntLitTokens.in not found.");
-            System.exit(-1);
-        } catch (IOException ex) {
-            System.err.println("IntLitTokens.out cannot be opened.");
-            System.exit(-1);
-        }
+    // /**
+    //  * testIdentifier
+    //  *
+    //  * Open and read from file identifierTokens.txt
+    //  * For each token read, write the corresponding string to identifierTokens.out
+    //  * If the input file contains all tokens, one per line, we can verify
+    //  * correctness of the scanner by comparing the input and output files
+    //  * (e.g., using a 'diff' command).
+    //  */
+    // private static void testIntTokens() throws IOException {
+    //     // open input and output files
+    //     FileReader inFile = null;
+    //     PrintWriter outFile = null;
+    //     try {
+    //         inFile = new FileReader("IntLitTokens.in");
+    //         outFile = new PrintWriter(new FileWriter("IntLitTokens.out"));
+    //     } catch (FileNotFoundException ex) {
+    //         System.err.println("File IntLitTokens.in not found.");
+    //         System.exit(-1);
+    //     } catch (IOException ex) {
+    //         System.err.println("IntLitTokens.out cannot be opened.");
+    //         System.exit(-1);
+    //     }
 
-        // create and call the scanner
-        Yylex scanner = new Yylex(inFile);
-        Symbol token = scanner.next_token();
-        while (token.sym != sym.EOF) {
-            if(token.sym == sym.INTLITERAL){
-                outFile.println(((IntLitTokenVal)token.value).intVal + "  " + 
-                                ((IntLitTokenVal)token.value).linenum + "  " + 
-                                ((IntLitTokenVal)token.value).charnum);
-            }
-            token = scanner.next_token();
-        } // end while
-        outFile.close();
-    }
+    //     // create and call the scanner
+    //     Yylex scanner = new Yylex(inFile);
+    //     Symbol token = scanner.next_token();
+    //     while (token.sym != sym.EOF) {
+    //         if(token.sym == sym.INTLITERAL){
+    //             outFile.println(((IntLitTokenVal)token.value).intVal + "  " + 
+    //                             ((IntLitTokenVal)token.value).linenum + "  " + 
+    //                             ((IntLitTokenVal)token.value).charnum);
+    //         }
+    //         token = scanner.next_token();
+    //     } // end while
+    //     outFile.close();
+    // }
 
-    /**
-     * testIdentifier
-     *
-     * Open and read from file identifierTokens.txt
-     * For each token read, write the corresponding string to identifierTokens.out
-     * If the input file contains all tokens, one per line, we can verify
-     * correctness of the scanner by comparing the input and output files
-     * (e.g., using a 'diff' command).
-     */
-    private static void testStrTokens() throws IOException {
-        // open input and output files
-        FileReader inFile = null;
-        PrintWriter outFile = null;
-        try {
-            inFile = new FileReader("StrLitTokens.in");
-            outFile = new PrintWriter(new FileWriter("StrLitTokens.out"));
-        } catch (FileNotFoundException ex) {
-            System.err.println("File StrLitTokens.in not found.");
-            System.exit(-1);
-        } catch (IOException ex) {
-            System.err.println("StrLitTokens.out cannot be opened.");
-            System.exit(-1);
-        }
+    // /**
+    //  * testIdentifier
+    //  *
+    //  * Open and read from file identifierTokens.txt
+    //  * For each token read, write the corresponding string to identifierTokens.out
+    //  * If the input file contains all tokens, one per line, we can verify
+    //  * correctness of the scanner by comparing the input and output files
+    //  * (e.g., using a 'diff' command).
+    //  */
+    // private static void testStrTokens() throws IOException {
+    //     // open input and output files
+    //     FileReader inFile = null;
+    //     PrintWriter outFile = null;
+    //     try {
+    //         inFile = new FileReader("StrLitTokens.in");
+    //         outFile = new PrintWriter(new FileWriter("StrLitTokens.out"));
+    //     } catch (FileNotFoundException ex) {
+    //         System.err.println("File StrLitTokens.in not found.");
+    //         System.exit(-1);
+    //     } catch (IOException ex) {
+    //         System.err.println("StrLitTokens.out cannot be opened.");
+    //         System.exit(-1);
+    //     }
 
-        // create and call the scanner
-        Yylex scanner = new Yylex(inFile);
-        Symbol token = scanner.next_token();
-        while (token.sym != sym.EOF) {
-            if(token.sym == sym.STRINGLITERAL){
-                outFile.println(((StrLitTokenVal)token.value).strVal + "  " + 
-                                ((StrLitTokenVal)token.value).linenum + "  " + 
-                                ((StrLitTokenVal)token.value).charnum);
-            }
-            token = scanner.next_token();
-        } // end while
-        outFile.close();
-    }
+    //     // create and call the scanner
+    //     Yylex scanner = new Yylex(inFile);
+    //     Symbol token = scanner.next_token();
+    //     while (token.sym != sym.EOF) {
+    //         if(token.sym == sym.STRINGLITERAL){
+    //             outFile.println(((StrLitTokenVal)token.value).strVal + "  " + 
+    //                             ((StrLitTokenVal)token.value).linenum + "  " + 
+    //                             ((StrLitTokenVal)token.value).charnum);
+    //         }
+    //         token = scanner.next_token();
+    //     } // end while
+    //     outFile.close();
+    // }
 
     /**
      * testAllTokens
@@ -151,13 +155,13 @@ public class P2 {
      * correctness of the scanner by comparing the input and output files
      * (e.g., using a 'diff' command).
      */
-    private static void testAllTokens() throws IOException {
+    private static void testAllTokens(String fileIn, String fileOut) throws IOException {
         // open input and output files
         FileReader inFile = null;
         PrintWriter outFile = null;
         try {
-            inFile = new FileReader("allTokens.in");
-            outFile = new PrintWriter(new FileWriter("allTokens.out"));
+            inFile = new FileReader(fileIn);
+            outFile = new PrintWriter(new FileWriter(fileOut));
         } catch (FileNotFoundException ex) {
             System.err.println("File allTokens.in not found.");
             System.exit(-1);
@@ -172,125 +176,244 @@ public class P2 {
         while (token.sym != sym.EOF) {
             switch (token.sym) {
             case sym.BOOL:
-                outFile.println("bool" + "  " + ((TokenVal)token.value).linenum 
-                                + "  " + ((TokenVal)token.value).charnum); 
+                outFile.println("bool" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum); 
                 break;
             case sym.INT:
-                outFile.println("int");
+                outFile.println("int" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.VOID:
-                outFile.println("void");
+                outFile.println("void" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.TRUE:
-                outFile.println("true"); 
+                outFile.println("true" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.FALSE:
-                outFile.println("false"); 
+                outFile.println("false" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.STRUCT:
-                outFile.println("struct"); 
+                outFile.println("struct" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.CIN:
-                outFile.println("cin"); 
+                outFile.println("cin" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.COUT:
-                outFile.println("cout");
+                outFile.println("cout" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;				
             case sym.IF:
-                outFile.println("if");
+                outFile.println("if" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.ELSE:
-                outFile.println("else");
+                outFile.println("else" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.WHILE:
-                outFile.println("while");
+                outFile.println("while" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.RETURN:
-                outFile.println("return");
+                outFile.println("return" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.ID:
-                outFile.println(((IdTokenVal)token.value).idVal);
+                outFile.println(((IdTokenVal)token.value).idVal + " lineNum: " 
+                                    + ((IdTokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((IdTokenVal)token.value).charnum);
                 break;
-            case sym.INTLITERAL:  
-                outFile.println(((IntLitTokenVal)token.value).intVal);
+            case sym.INTLITERAL: 
+                outFile.println(((IntLitTokenVal)token.value).intVal + " lineNum: " 
+                                    + ((IntLitTokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((IntLitTokenVal)token.value).charnum); 
                 break;
             case sym.STRINGLITERAL: 
-                outFile.println(((StrLitTokenVal)token.value).strVal);
+                outFile.println(((StrLitTokenVal)token.value).strVal + " lineNum: " 
+                                    + ((StrLitTokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((StrLitTokenVal)token.value).charnum);
                 break;    
             case sym.LCURLY:
-                outFile.println("{");
+                outFile.println("{" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.RCURLY:
-                outFile.println("}");
+                outFile.println("}" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.LPAREN:
-                outFile.println("(");
+                outFile.println("(" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.RPAREN:
-                outFile.println(")");
+                outFile.println(")" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.SEMICOLON:
-                outFile.println(";");
+                outFile.println(";" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.COMMA:
-                outFile.println(",");
+                outFile.println("," + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.DOT:
-                outFile.println(".");
+                outFile.println("." + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.WRITE:
-                outFile.println("<<");
+                outFile.println("<<" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.READ:
-                outFile.println(">>");
+                outFile.println(">>" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;				
             case sym.PLUSPLUS:
-                outFile.println("++");
+                outFile.println("++" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.MINUSMINUS:
-                outFile.println("--");
+                outFile.println("--" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;	
             case sym.PLUS:
-                outFile.println("+");
+                outFile.println("+" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.MINUS:
-                outFile.println("-");
+                outFile.println("-" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.TIMES:
-                outFile.println("*");
+                outFile.println("*" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.DIVIDE:
-                outFile.println("/");
+                outFile.println("/" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.NOT:
-                outFile.println("!");
+                outFile.println("!" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.AND:
-                outFile.println("&&");
+                outFile.println("&&" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.OR:
-                outFile.println("||");
+                outFile.println("||" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.EQUALS:
-                outFile.println("==");
+                outFile.println("==" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.NOTEQUALS:
-                outFile.println("!=");
+                outFile.println("!=" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.LESS:
-                outFile.println("<");
+                outFile.println("<" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.GREATER:
-                outFile.println(">");
+                outFile.println(">" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.LESSEQ:
-                outFile.println("<=");
+                outFile.println("<=" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
             case sym.GREATEREQ:
-                outFile.println(">=");
+                outFile.println(">=" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
 			case sym.ASSIGN:
-                outFile.println("=");
+                outFile.println("=" + " lineNum: " 
+                                    + ((TokenVal)token.value).linenum 
+                                    + " charNum: " 
+                                    + ((TokenVal)token.value).charnum);
                 break;
 			default:
 				outFile.println("UNKNOWN TOKEN");

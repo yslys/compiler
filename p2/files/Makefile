@@ -44,7 +44,7 @@ test:
 ###
 
 clean:
-	rm -f *~ *.class cminusminus.jlex.java
+	rm -f *~ *.class cminusminus.jlex.java *.out
 
 cleantest:
 	rm -f allTokens.out

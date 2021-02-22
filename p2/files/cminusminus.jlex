@@ -153,7 +153,7 @@ return new Symbol(sym.EOF);
             return s;
           }
 
-({LETTER}|_)+({LETTER}|{DIGIT}|_)* {
+({LETTER}|_)({LETTER}|{DIGIT}|_)* {
             // identifier 
             // (a seq of >=1 letters and/or digits, and/or underscores, starting 
             // with a letter or underscore, excluding reserved words)
@@ -187,13 +187,24 @@ return new Symbol(sym.EOF);
             return s;
           }   
 
-[\"]{STRING_CHAR}*[\"] {
+[\"]({STRING_CHAR})*[\"] {
             // string literal 
             // (a seq of >=0 string characters surrounded by double quotes)
             Symbol s = new Symbol(sym.STRINGLITERAL, 
                             new StrLitTokenVal(yyline+1, CharNum.num, yytext()));
             CharNum.num += yytext().length();
             return s;
+}
+
+([\"](({STRING_CHAR})*[\\][^nt'\"?\\\n]({STRING_CHAR})*)+)|([\"](({STRING_CHAR})*({BAD_ESCAPE_CHAR})*)*[\\][\n]) {
+            // bad string literal
+            // (includes a bad escaped char AND not terminated)
+            // ignore the Bad Str Lit (start looking for the next token after 
+            // the closing quote)
+            // ***so this regexp must keep reading all SINGLE_CHARs*** 
+            ErrMsg.fatal(yyline+1, CharNum.num,
+                    "unterminated string literal with bad escaped character ignored");
+            CharNum.num = 1;
 }
 
 [\"]({STRING_CHAR})* {
@@ -207,16 +218,7 @@ return new Symbol(sym.EOF);
             CharNum.num = 1;
 }
 
-[\"](({STRING_CHAR})*{BAD_ESCAPE_CHAR}({STRING_CHAR})*)+ {
-            // bad string literal
-            // (includes a bad escaped char AND not terminated)
-            // ignore the Bad Str Lit (start looking for the next token after 
-            // the closing quote)
-            // ***so this regexp must keep reading all SINGLE_CHARs*** 
-            ErrMsg.fatal(yyline+1, CharNum.num,
-                    "unterminated string literal with bad escaped character ignored");
-            CharNum.num = 1;
-}
+
 
 [\"]({STRING_CHAR}*{BAD_ESCAPE_CHAR}{STRING_CHAR}*)+[\"] {
             // bad string literal

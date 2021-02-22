@@ -1,0 +1,38 @@
+bool  int
+void true false struct
+cin
+cout
+if
+else
+while
+return
+{}
+(     )
+;      
+,
+.
+<<<<<
+>>
+++
+--
++
+-
+*
+/
+!
+&&
+||
+==
+!=
+<
+>
+<=
+>=
+=
+// this is a comment
+## and so is this
+    
+\
+
+int a = 1 + 2;
+bool x = m&&yy
