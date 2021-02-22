@@ -1,22 +1,26 @@
 "int a = 3 * x;"
-""   "second str with charNum=6"
-"&!88"
+"" "second str with charNum=6"
+"&!88" "\n""|@#$%^&*()"   "two tabs before this str"
 "use \n to denote a newline character"
 "include a quote like this \" and a backslash like this \\"
 "unterminated
+
 "also unterminated \"
+"\
+  "\ 
+  "\  
+
 "backslash followed by space: \ is not allowed"
 "bad escaped character: \a AND not terminated
-"very bad string \
-"dfs \a  dfs f 
-"dfs \a dsf \   sdfsdf\  
-dsfsdf "\
-
-"int a = 1 + 3;"
-"jfdkl \
-"dfs \a  dfs f 
-"dfs \a dsf \   sdfsdf\
+"a space after back slash \ 
+"a tab after back slash\
+"random spaces and tabs after back slash  \         
+"no space after back slash\
+"hi \s hi \k  no space after backslash   \
+identifierHere "\
 
 
+"terminated \s bad escape  "id1 id2"
+"terminated legal  "id1 id2"
 
-df
+    "unterminated 
