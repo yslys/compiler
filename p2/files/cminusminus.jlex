@@ -197,6 +197,7 @@ return new Symbol(sym.EOF);
 
 
 ([\"](({STRING_CHAR})*[\\][^nt'\"?\\\n]({STRING_CHAR})*)+)|([\"](({STRING_CHAR})*({BAD_ESCAPE_CHAR})*)*[\\]([\n]?)) {
+            // ([\"](({STRING_CHAR})*[\\][^nt'\"?\\\n]({STRING_CHAR})*)+)|([\"](({STRING_CHAR})*({BAD_ESCAPE_CHAR})*)*[\\]([\n]?))
             // bad string literal
             // (includes a bad escaped char AND not terminated)
             // ignore the Bad Str Lit (start looking for the next token after 
