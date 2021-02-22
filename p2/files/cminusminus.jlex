@@ -292,7 +292,7 @@ return new Symbol(sym.EOF);
         }  
          
 "--"    { 
-            Symbol s = new Symbol(sym.PLUSPLUS, new TokenVal(yyline+1, CharNum.num));
+            Symbol s = new Symbol(sym.MINUSMINUS, new TokenVal(yyline+1, CharNum.num));
             CharNum.num += 2;
             return s;
         }
