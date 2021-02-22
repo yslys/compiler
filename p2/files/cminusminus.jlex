@@ -227,7 +227,7 @@ return new Symbol(sym.EOF);
             // quote
             ErrMsg.fatal(yyline + 1, CharNum.num, 
                     "string literal with bad escaped character ignored");
-            CharNum.num = 1;
+            CharNum.num += yytext().length();
 }
 
 "{"       {   

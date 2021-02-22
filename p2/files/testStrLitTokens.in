@@ -1,5 +1,5 @@
 "int a = 3 * x;"
-"" "second str with charNum=6"
+"" "second str with charNum=4"
 "&!88" "\n""|@#$%^&*()"   "two tabs before this str"
 "use \n to denote a newline character"
 "include a quote like this \" and a backslash like this \\"
