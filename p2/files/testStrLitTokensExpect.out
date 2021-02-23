@@ -4,7 +4,7 @@
 "&!88" lineNum: 3 charNum: 1
 "\n" lineNum: 3 charNum: 8
 "|@#$%^&*()" lineNum: 3 charNum: 12
-"two tabs before this str" lineNum: 3 charNum: 27
+"two tabs before this str" lineNum: 3 charNum: 26
 "use \n to denote a newline character" lineNum: 4 charNum: 1
 "include a quote like this \" and a backslash like this \\" lineNum: 5 charNum: 1
 identifierHere lineNum: 20 charNum: 1

@@ -7,8 +7,8 @@
 6:1 ***ERROR*** unterminated string literal ignored
 8:1 ***ERROR*** unterminated string literal ignored
 9:1 ***ERROR*** unterminated string literal with bad escaped character ignored
-10:3 ***ERROR*** unterminated string literal with bad escaped character ignored
-11:3 ***ERROR*** unterminated string literal with bad escaped character ignored
+10:2 ***ERROR*** unterminated string literal with bad escaped character ignored
+11:2 ***ERROR*** unterminated string literal with bad escaped character ignored
 13:1 ***ERROR*** string literal with bad escaped character ignored
 14:1 ***ERROR*** unterminated string literal with bad escaped character ignored
 15:1 ***ERROR*** unterminated string literal with bad escaped character ignored
@@ -22,3 +22,4 @@
 24:28 ***ERROR*** unterminated string literal ignored
 26:5 ***ERROR*** unterminated string literal ignored
 1:1 ***ERROR*** unterminated string literal ignored
+1:1 ***ERROR*** string literal with bad escaped character ignored
