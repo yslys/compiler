@@ -98,33 +98,48 @@ start with program;
  *
  */
 program         ::= declList: d
-                {: RESULT = new ProgramNode(new DeclListNode(d));
+                {: 
+                    RESULT = new ProgramNode(new DeclListNode(d));
                 :}
                 ;
 
 declList        ::= declList:dl decl:d
-                {: dl.addLast(d);
-                   RESULT = dl;
+                {: 
+                    dl.addLast(d);
+                    RESULT = dl;
                 :}
                 | /* epsilon */
-                {: RESULT = new LinkedList<DeclNode>();
+                {: 
+                    RESULT = new LinkedList<DeclNode>();
                 :}
                 ;
 
 decl            ::= varDecl:v
-                {: RESULT = v;
+                {: 
+                    RESULT = v;
                 :}
                 ;
 
 varDecl         ::= type:t id:i SEMICOLON
-                {: RESULT = new VarDeclNode(t, i, VarDeclNode.NOT_STRUCT);
+                {: 
+                    RESULT = new VarDeclNode(t, i, VarDeclNode.NOT_STRUCT);
                 :}
                 ;
 
 type            ::= INT
                 {: RESULT = new IntNode();
                 :}
+                | BOOL
+                {:
+                    RESULT = new BoolNode();
+                :}
+                | VOID
+                {:
+                    RESULT = new VoidNode();
+                :}
                 ;
+
+
 
 id              ::= ID:i
                 {: RESULT = new IdNode(i.linenum, i.charnum, i.idVal);

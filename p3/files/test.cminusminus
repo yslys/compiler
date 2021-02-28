@@ -1,2 +1,5 @@
-int x;
+bool x;
 int y;
+int z;
+void f;
+struct test;
