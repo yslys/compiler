@@ -37,18 +37,30 @@ ErrMsg.class: ErrMsg.java
 ###
 test:
 	java -cp $(CP) P2 2> errors.out
+<<<<<<< HEAD
+=======
+
+>>>>>>> d028c7a48dbd9c62b9fe241880c58a7c213ddb89
 	diff testAllTokens.out testAllTokensExpect.out
 	diff testIDTokens.out testIDTokensExpect.out
 	diff testIntLitTokens.out testIntLitTokensExpect.out
 	diff testStrLitTokens.out testStrLitTokensExpect.out
 	diff testEOF.out testEOFExpect.out
+<<<<<<< HEAD
+=======
+	diff testCommentEOF.out testCommentEOFExpect.out
+	diff testBadStrLitEOF.out testBadStrLitEOFExpect.out
+	diff errors.out errorsExpect.out
+>>>>>>> d028c7a48dbd9c62b9fe241880c58a7c213ddb89
 
 ###
 # clean up
 ###
 
 clean:
-	rm -f *~ *.class cminusminus.jlex.java *.out
+	rm -f *~ *.class cminusminus.jlex.java
+	rm -f testAllTokens.out testEOF.out testIDTokens.out testIntLitTokens.out 
+	rm -f testStrLitTokens.out errors.out testCommentEOF.out testBadStrLitEOF.out
 
 cleantest:
 	rm -f allTokens.out

@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 1 lineNum: 1 charNum: 1
 13 lineNum: 2 charNum: 1
 254534 lineNum: 3 charNum: 1
+=======
+0 lineNum: 1 charNum: 1
+0 lineNum: 2 charNum: 1
+123 lineNum: 2 charNum: 6
+1 lineNum: 3 charNum: 1
+13 lineNum: 3 charNum: 3
+254534 lineNum: 3 charNum: 6
+>>>>>>> d028c7a48dbd9c62b9fe241880c58a7c213ddb89
 51236554 lineNum: 4 charNum: 1
 2147483647 lineNum: 5 charNum: 1
 2147483647 lineNum: 6 charNum: 1

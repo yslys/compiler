@@ -61,7 +61,6 @@ class CharNum {
 DIGIT=               [0-9]
 LETTER=              [a-zA-Z]
 SPACE=               [\040\t]
-
 ESCAPE_CHAR = [\\][nt'\"?\\]
 BAD_ESCAPE_CHAR = [\\][^nt'\"?\\]
 SINGLE_CHAR = [^\n\"\\]
@@ -196,7 +195,9 @@ return new Symbol(sym.EOF);
             return s;
 }
 
-([\"](({STRING_CHAR})*[\\][^nt'\"?\\\n]({STRING_CHAR})*)+)|([\"](({STRING_CHAR})*({BAD_ESCAPE_CHAR})*)*[\\][\n]) {
+
+([\"](({STRING_CHAR})*[\\][^nt'\"?\\\n]({STRING_CHAR})*)+)|([\"](({STRING_CHAR})*({BAD_ESCAPE_CHAR})*)*[\\]([\n]?)) {
+            // ([\"](({STRING_CHAR})*[\\][^nt'\"?\\\n]({STRING_CHAR})*)+)|([\"](({STRING_CHAR})*({BAD_ESCAPE_CHAR})*)*[\\]([\n]?))
             // bad string literal
             // (includes a bad escaped char AND not terminated)
             // ignore the Bad Str Lit (start looking for the next token after 
@@ -206,6 +207,7 @@ return new Symbol(sym.EOF);
                     "unterminated string literal with bad escaped character ignored");
             CharNum.num = 1;
 }
+
 
 [\"]({STRING_CHAR})* {
             // unterminated string literal
@@ -218,18 +220,15 @@ return new Symbol(sym.EOF);
             CharNum.num = 1;
 }
 
-
-
-[\"]({STRING_CHAR}*{BAD_ESCAPE_CHAR}{STRING_CHAR}*)+[\"] {
+[\"](({STRING_CHAR})*([\\][^nt'\"?\\\n])({STRING_CHAR})*)+[\"] {
             // bad string literal
             // terminated, but includes a bad escaped char
             // after reading the single escaped char, keep reading until a double 
             // quote
             ErrMsg.fatal(yyline + 1, CharNum.num, 
                     "string literal with bad escaped character ignored");
-            CharNum.num = 1;
+            CharNum.num += yytext().length();
 }
-
 
 "{"       {   
             Symbol s = new Symbol(sym.LCURLY, new TokenVal(yyline+1, CharNum.num));

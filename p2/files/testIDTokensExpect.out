@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 abcd lineNum: 1 charNum: 1
 _abcd lineNum: 1 charNum: 8
 _2334 lineNum: 2 charNum: 1
@@ -9,3 +10,21 @@ xfor1 lineNum: 6 charNum: 1
 int2 lineNum: 7 charNum: 1
 222 lineNum: 8 charNum: 1
 sdfsdf lineNum: 8 charNum: 8
+=======
+intabcd lineNum: 1 charNum: 1
+ab12 lineNum: 2 charNum: 1
+ab_12_cd lineNum: 3 charNum: 1
+ab_cd__ lineNum: 4 charNum: 1
+a_b_3 lineNum: 5 charNum: 1
+a_b_3___ lineNum: 5 charNum: 7
+_abcd lineNum: 6 charNum: 1
+_2334 lineNum: 6 charNum: 7
+ab_23 lineNum: 7 charNum: 1
+ab_cd lineNum: 7 charNum: 7
+abcd_ lineNum: 7 charNum: 13
+a_ lineNum: 8 charNum: 1
+int1 lineNum: 10 charNum: 1
+boolfalse lineNum: 10 charNum: 6
+fora lineNum: 10 charNum: 16
+xwhile2 lineNum: 11 charNum: 1
+>>>>>>> d028c7a48dbd9c62b9fe241880c58a7c213ddb89
