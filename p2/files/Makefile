@@ -36,8 +36,12 @@ ErrMsg.class: ErrMsg.java
 # to expected results
 ###
 test:
-	java -cp $(CP) P2 
-	diff allTokens.in allTokens.out
+	java -cp $(CP) P2 2> errors.out
+	diff testAllTokens.out testAllTokensExpect.out
+	diff testIDTokens.out testIDTokensExpect.out
+	diff testIntLitTokens.out testIntLitTokensExpect.out
+	diff testStrLitTokens.out testStrLitTokensExpect.out
+	diff testEOF.out testEOFExpect.out
 
 ###
 # clean up

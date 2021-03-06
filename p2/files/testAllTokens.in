@@ -2,37 +2,32 @@ bool  int
 void true false struct
 cin
 cout
-if
-else
-while
-return
+if else
+while   return
 {}
 (     )
-;      
-,
-.
-<<<<<
+;   , .
+<<
 >>
 ++
 --
-+
--
-*
-/
++ - * /
 !
-&&
-||
-==
-!=
-<
->
-<=
->=
+&& ||
+== !=
+< > <= >=
 =
 // this is a comment
-## and so is this
-    
+## and so is this   
 \
 
 int a = 1 + 2;
 bool x = m&&yy
+if(m != n){
+    return ture;
+}
+
+while(i < 100){
+    i++;
+}
+<<<<<

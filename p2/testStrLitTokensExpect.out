@@ -1,0 +1,7 @@
+"" lineNum: 1 charNum: 1
+"second str with charNum=6" lineNum: 1 charNum: 6
+"&!88" lineNum: 2 charNum: 1
+"use \n to denote a newline character" lineNum: 2 charNum: 11
+"include a quote like this \" and a backslash like this \\" lineNum: 3 charNum: 1
+dsfsdf lineNum: 11 charNum: 1
+"int a = 1 + 3;" lineNum: 13 charNum: 1

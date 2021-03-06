@@ -1,6 +1,5 @@
 ""   "second str with charNum=6"
-"&!88"
-"use \n to denote a newline character"
+"&!88"    "use \n to denote a newline character"  "no end
 "include a quote like this \" and a backslash like this \\"
 "unterminated
 "also unterminated \"

@@ -1,0 +1,22 @@
+22:1 ***ERROR*** ignoring illegal character: \
+8:4 ***ERROR*** ignoring illegal character: #
+8:5 ***ERROR*** ignoring illegal character: @
+8:6 ***ERROR*** ignoring illegal character: @
+8:7 ***ERROR*** ignoring illegal character: @
+6:1 ***WARNING*** integer literal too large; using max value
+7:1 ***WARNING*** integer literal too large; using max value
+2:51 ***ERROR*** unterminated string literal ignored
+4:1 ***ERROR*** unterminated string literal ignored
+5:1 ***ERROR*** unterminated string literal ignored
+6:1 ***ERROR*** unterminated string literal with bad escaped character ignored
+6:1 ***ERROR*** unterminated string literal ignored
+7:1 ***ERROR*** unterminated string literal with bad escaped character ignored
+8:1 ***ERROR*** unterminated string literal with bad escaped character ignored
+9:1 ***ERROR*** unterminated string literal with bad escaped character ignored
+10:1 ***ERROR*** unterminated string literal with bad escaped character ignored
+12:1 ***ERROR*** unterminated string literal with bad escaped character ignored
+14:1 ***ERROR*** unterminated string literal with bad escaped character ignored
+15:1 ***ERROR*** unterminated string literal with bad escaped character ignored
+16:1 ***ERROR*** unterminated string literal with bad escaped character ignored
+16:1 ***ERROR*** ignoring illegal character: \
+1:1 ***ERROR*** unterminated string literal ignored
