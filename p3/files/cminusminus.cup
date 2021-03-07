@@ -228,7 +228,7 @@ formalDecl      ::= type:t id:i        // note: no struct parameters
                 ;
 
 fnBody          ::= LCURLY varDeclList:vl stmtList:sl RCURLY
-                {: RESULT = new FnBodyNode(new DeclListNode(vl), new StmtListNode(sl));  
+                {: RESULT = new FnBodyNode(new DeclListNode(vl), new StmtListNode(sl)); 
                 :}
                 ;
 
