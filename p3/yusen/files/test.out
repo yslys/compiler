@@ -22,7 +22,12 @@ int foo() {
 bool foo(int x, int y, bool z) {
     int a;
     int b;
+    bool aa;
+    bool bb;
     a = "hello";
+    aa = true;
+    bb = false;
+    aa = (!bb);
     c = (a + b);
     a = (b - c);
     d = (a * c);
@@ -53,9 +58,14 @@ bool foo(int x, int y, bool z) {
     d = (-foo(x, y, z));
     d = foo1(foo2(foo3(), foo4(x, y)), foo5());
     d = foo1.list.getElement.setNull;
+    a = c = ((z >= y) || ((((a != b) && (!aa)) && (!(a == b))) && ((((a + b) - (c * d)) + (a / d)) <= a)));
     return 0;
 }
 int func(int a) {
+    a++;
+    b--;
+    c++;
+    c--;
     cin >> a;
     cin >> a.b.c.d;
     cout << b;
@@ -102,7 +112,19 @@ int func(int a) {
             }
         }
     }
-    foo1(b, c, d);
+    repeat (true) {
+        int a;
+        int b;
+        res = (b + a);
+        x = ((1 + (3 * 2)) - y);
+    }
+    if ((a != b)) {
+        c = (a == true);
+    }
+    else {
+        c = (a != b);
+    }
+    foo(b, c, d);
     return a;
     return true;
     return false;
@@ -111,72 +133,15 @@ int func(int a) {
     return a.b.c.d;
     return foo(foo1(x, y), foo2(), foo3(foo4(), foo(5)));
 }
-void func(int a, int b) {
-    a = c = (((((a > b) && (a < b)) || ((a <= b) && ((!a) >= b))) || (!(a != b))) || ((a + (b * c)) - (((d / e) * k) / (!b))));
-    a++;
-    b--;
-    c++;
-    c--;
-    result = "zzy";
-    result = a.b.c.d.e.f.g;
-    result = 1;
-    result = true;
-    result = false;
-    result = (c > 1);
-    result = (c < 1);
-    result = (c >= 1);
-    result = (c <= 1);
-    result = (c == c);
-    result = (c != c);
-    result = (c + 2);
-    result = (c / 2);
-    result = (c * 2);
-    result = (c - 2);
-    result = (c && c);
-    result = ((c || c) || c);
-    result = (!c);
-    result = (-c);
-    cin >> i;
-    cout << b;
-    return;
-    return a;
-    return sort(a, sort(a, (b + (c * d))));
-    return sort();
-    repeat (true) {
-        int a;
-        bool b;
-        result = (b + c);
-        x = ((4 + (3 * 5)) - y);
-    }
-    while (true) {
-        y = ((y * 2) + x);
-    }
-    if ((b == (-1))) {
-        x = ((4 + (3 * 5)) - y);
-        while (c) {
-            y = ((y * 2) + x);
-        }
-    }
-    if ((b == (-1))) {
-        x = ((4 + (3 * 5)) - y);
-        while (c) {
-            y = ((y * 2) + x);
-        }
-    }
-    else {
-        x = 0;
-    }
-}
 int main() {
-    int la;
-    int nw;
-    cin >> n;
-    while (false) {
-        cin >> num;
-        p.first = num;
-        p.second = i;
+    int abc;
+    int def;
+    while (true) {
+        cin >> abc;
+        foo.ac = abc;
+        foo.de = def;
     }
-    res = min(res, dp);
+    res = min(res, abc);
     cout << res;
     return res;
 }
