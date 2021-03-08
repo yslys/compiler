@@ -108,7 +108,7 @@ int func(int a) {
                 }
             }
             if (((b < 2) && (b != 1))) {
-                result = 3;
+                return 3;
             }
         }
     }

@@ -115,7 +115,7 @@ precedence nonassoc EQUALS, NOTEQUALS, LESS, GREATER, LESSEQ, GREATEREQ;
 precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE;
 precedence right NOT;
-// precedence left DOT;
+precedence left DOT;
 
 
 start with program;

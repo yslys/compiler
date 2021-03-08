@@ -132,7 +132,7 @@ int func(int a){
             }
 
             if (b < 2 && b != 1){
-                result = 3;
+                return 3;
             }
         }
     }
@@ -161,7 +161,7 @@ int func(int a){
 }
 
 
-
+// TEST: massive indentations and fnDecl
 int main() {int abc;int def; while (true) {cin >> abc;foo.ac = abc;foo.de = def;}res = min(res, abc);cout << res; return res;}
 
 // TEST: fnDecl
