@@ -2,6 +2,15 @@ int a;
 bool a;
 void b;
 struct node x;
+int x;
+bool y;
+void z;
+struct node_t {
+    int a;
+    int bb;
+    bool ccc;
+    struct node_x node;
+};
 struct node_t {
     int a;
     int bb;
@@ -77,7 +86,7 @@ int func(int a) {
                         a = (b + c);
                         a--;
                     }
-                    return false;
+                    return 1;
                 }
                 else {
                     repeat (((x < y) || ((b > c) && (d < x)))) {
@@ -85,7 +94,7 @@ int func(int a) {
                         x = (b * y);
                         x++;
                     }
-                    return true;
+                    return 2;
                 }
             }
             if (((b < 2) && (b != 1))) {
@@ -104,6 +113,8 @@ int func(int a) {
 }
 void func(int a, int b) {
     a = c = (((((a > b) && (a < b)) || ((a <= b) && ((!a) >= b))) || (!(a != b))) || ((a + (b * c)) - (((d / e) * k) / (!b))));
+    a++;
+    b--;
     c++;
     c--;
     result = "zzy";
@@ -156,9 +167,6 @@ void func(int a, int b) {
         x = 0;
     }
 }
-int N;
-int INF;
-int n;
 int main() {
     int la;
     int nw;
@@ -168,17 +176,9 @@ int main() {
         p.first = num;
         p.second = i;
     }
-    sort((p + 1), ((p + n) + 1));
-    if (true) {
-        swap(la, nw);
-        fill((dp + 1), ((dp + n) + 1), INF);
-        while (false) {
-            pmin = min(pmin, dp);
-            dp = (pmin + abs((cur_num - p.first)));
-        }
-    }
     res = min(res, dp);
     cout << res;
+    return res;
 }
 int main() {
     if ((b == (-1))) {
@@ -190,4 +190,5 @@ int main() {
     else {
         x = 0;
     }
+    return 0;
 }
