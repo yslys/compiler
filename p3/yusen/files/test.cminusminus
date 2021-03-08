@@ -14,6 +14,8 @@ struct node_t {
     bool ccc;
     struct node_x node;
 };
+
+// TEST: struct with massive indentations
 struct node_t {int a;int bb;bool ccc;struct node_x node;};
 
 
@@ -76,8 +78,8 @@ bool foo(int x, int y, bool z){
     d = foo1(foo2(foo3(), foo4(x, y)), foo5());
     d = foo1.list.getElement.setNull;
 
-    a = c = z >=y || a != b && !aa && !(a == b) && a + b -c*d + a/d <= a;
-
+    // thorough test
+    a = b >=c && d < -100 || a!=b && !abcd || -5 && !(a == b) && a + b -c*d + a/d <= a;
 
     return 0;
 }
@@ -87,7 +89,7 @@ bool foo(int x, int y, bool z){
 int func(int a){
     a++;
     b--;
-    c++; c--;
+    c++; c--; // TEST: in-line comment
     // test for read and write
     cin >> a;
     cin >> a.b.c.d;

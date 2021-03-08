@@ -58,7 +58,7 @@ bool foo(int x, int y, bool z) {
     d = (-foo(x, y, z));
     d = foo1(foo2(foo3(), foo4(x, y)), foo5());
     d = foo1.list.getElement.setNull;
-    a = c = ((z >= y) || ((((a != b) && (!aa)) && (!(a == b))) && ((((a + b) - (c * d)) + (a / d)) <= a)));
+    a = ((((b >= c) && (d < (-100))) || ((a != b) && (!abcd))) || (((-5) && (!(a == b))) && ((((a + b) - (c * d)) + (a / d)) <= a)));
     return 0;
 }
 int func(int a) {
