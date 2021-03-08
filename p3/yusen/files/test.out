@@ -1,4 +1,68 @@
+int a;
+bool a;
+void b;
+struct node x;
+struct node_t {
+    int a;
+    int bb;
+    bool ccc;
+    struct node_x node;
+};
+int foo() {
+}
+bool foo(int x, int y, bool z) {
+    int a;
+    int b;
+    a = "hello";
+    c = (a + b);
+    a = (b - c);
+    d = (a * c);
+    b = (a / d);
+    c = (((((a + b) + c) - (d / b)) + ((b * d) / c)) - x);
+    a = (!true);
+    a = (!b);
+    a = (b && c);
+    c = (c || d);
+    d = ((a && b) || (c && d));
+    a = (((b && d) && c) && d);
+    a = (((b || c) || d) || e);
+    d = (a == c);
+    a = b = c;
+    c = (a != c);
+    d = (a < b);
+    x = (a <= b);
+    d = (a > b);
+    d = (a >= b);
+    d = ((a < c) || (b > d));
+    d = ((a <= x) && (b >= y));
+    d = (-x);
+    d = (-3);
+    d = (-"hello");
+    d = true;
+    x = false;
+    d = (-(a <= c));
+    d = (-foo(x, y, z));
+    d = foo1(foo2(foo3(), foo4(x, y)), foo5());
+    d = foo1.list.getElement.setNull;
+    return 0;
+}
 int func(int a) {
+    cin >> a;
+    cin >> a.b.c.d;
+    cout << b;
+    cout << b.d.c.a;
+    cout << "hello again";
+    cout << (a + b);
+    cout << ((((b * c) / d) - 2) + (3 - x));
+    if ((b == (-1))) {
+        x = ((4 + (3 * 5)) - y);
+        while (c) {
+            y = ((y * 2) + x);
+        }
+    }
+    else {
+        x = 0;
+    }
     if ((1 >= 3)) {
         result = 23;
     }
@@ -7,31 +71,38 @@ int func(int a) {
             result = 1;
         }
         else {
-            result = 3;
+            if ((b > 2)) {
+                if ((x < 3)) {
+                    while (true) {
+                        a = (b + c);
+                        a--;
+                    }
+                    return false;
+                }
+                else {
+                    repeat (((x < y) || ((b > c) && (d < x)))) {
+                        int b;
+                        x = (b * y);
+                        x++;
+                    }
+                    return true;
+                }
+            }
+            if (((b < 2) && (b != 1))) {
+                result = 3;
+            }
         }
     }
-}
-int a;
-bool b;
-void c;
-struct s {
-    int a;
-    bool b;
-    void c;
-};
-void func() {
-    int a;
-    bool b;
-    void c;
-    struct s d;
-    struct d s;
+    foo1(b, c, d);
+    return a;
+    return true;
+    return false;
+    return (1 + (2 / 4));
+    return foo(a, b, c);
+    return a.b.c.d;
+    return foo(foo1(x, y), foo2(), foo3(foo4(), foo(5)));
 }
 void func(int a, int b) {
-    int a;
-    bool b;
-    void c;
-    a = b = c;
-    d = (!true);
     a = c = (((((a > b) && (a < b)) || ((a <= b) && ((!a) >= b))) || (!(a != b))) || ((a + (b * c)) - (((d / e) * k) / (!b))));
     c++;
     c--;
