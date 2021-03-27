@@ -194,6 +194,7 @@ class FormalsListNode extends ASTnode {
         for(FormalDeclNode f : myFormals){
             l.addLast(f.getStringType());
         }
+        return l;
     }
 
     private List<FormalDeclNode> myFormals;
@@ -399,12 +400,19 @@ class FnDeclNode extends DeclNode {
     public void naFnDeclNode(SymTable t){
         try{
             // if function name already declared, fatal
-            if(t.lookupLocal(myId.getStrVal())  != null){
+            if(t.lookupLocal(myId.getStrVal()) != null){
                 ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
                         "Multiply declared identifier");
             }
             // function name not yet declared in current scope
             else{
+                /** 
+                 * new a FnSym.
+                 * note that a FnSym has a field formalsList, getFormalsList first
+                 */ 
+                LinkedList<String> l = myFormalsList.getListTypes();
+
+                // do name analysis on each FormalDeclNode in FormalsListNode
 
             }
         }
