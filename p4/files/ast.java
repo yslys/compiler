@@ -189,7 +189,7 @@ class FormalsListNode extends ASTnode {
     }
 
     // get the list of types of formal list
-    public LinkedList<String> getListTypes(){
+    public LinkedList<String> getFormalTypeList(){
         LinkedList<String> l = new LinkedList<>();
         for(FormalDeclNode f : myFormals){
             l.addLast(f.getStringType());
@@ -301,7 +301,7 @@ class VarDeclNode extends DeclNode {
         if(this.mySize == NOT_STRUCT){
             
             // if type == void, then fatal
-            if(myType.getType().equals("void")){
+            if(myType.toString().equals("void")){
                 ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
                         "Non-Function declared void");
             }
@@ -321,7 +321,7 @@ class VarDeclNode extends DeclNode {
                         "Multiply declared identifier");
                 }
                 else { // not found in local scope
-                    t.addDecl(myId.getStrVal(), new TSym(myType.getType()));
+                    t.addDecl(myId.getStrVal(), new TSym(myType.toString()));
                 }
 
             }
@@ -336,8 +336,8 @@ class VarDeclNode extends DeclNode {
         else{
             try{
                 // if this struct has not been declared earlier, fatal
-                if(t.lookupGlobal(myType.getType()) == null
-                    || t.lookupGlobal(myType.getType()).getType()
+                if(t.lookupGlobal(myType.toString()) == null
+                    || t.lookupGlobal(myType.toString()).getType()
                                                        .equals("struct") == false){
                     ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
                             "Invalid name of struct type");
@@ -354,7 +354,7 @@ class VarDeclNode extends DeclNode {
                 }
                 // else, add to symtable
                 else{
-                    t.addDecl(myId.getStrVal(), new TSym(myType.getType()));
+                    t.addDecl(myId.getStrVal(), new TSym(myType.toString()));
                 }
             }
             catch(EmptySymTableException e){
@@ -409,12 +409,24 @@ class FnDeclNode extends DeclNode {
                 /** 
                  * new a FnSym.
                  * note that a FnSym has a field formalsList, getFormalsList first
+                 * such formal list has to be valid before adding to sym table
                  */ 
-                LinkedList<String> l = myFormalsList.getListTypes();
-
-                // do name analysis on each FormalDeclNode in FormalsListNode
-
+                LinkedList<String> l = myFormalsList.getFormalTypeList();
+                t.addDecl(myId.getStrVal(), new FnSym(myType.toString(), l));
             }
+        }
+        catch(){
+
+        }
+
+        t.addScope();
+        myFormalsList.naFormalsListNode(t);
+        myBody.naASTnode(t);
+        try{
+            t.removeScope();
+        }
+        catch(EmptySymTableException e){
+            System.out.println(e);
         }
         
         
@@ -440,7 +452,7 @@ class FormalDeclNode extends DeclNode {
     }
 
     public String getStringType(){
-        return this.myType.getType();
+        return this.myType.toString();
     }
     private TypeNode myType;
     private IdNode myId;
@@ -472,8 +484,8 @@ class StructDeclNode extends DeclNode {
 // **********************************************************************
 
 abstract class TypeNode extends ASTnode {
-    // every subclass must provide a getType operation 
-    abstract public String getType();
+    // every subclass must provide a toString operation 
+    abstract public String toString();
 }
 
 class IntNode extends TypeNode {
@@ -485,7 +497,7 @@ class IntNode extends TypeNode {
     }
 
     // get the type
-    public String getType(){
+    public String toString(){
         return "int";
     }
 }
@@ -499,7 +511,7 @@ class BoolNode extends TypeNode {
     }
 
     // get the type
-    public String getType(){
+    public String toString(){
         return "bool";
     }
 }
@@ -513,7 +525,7 @@ class VoidNode extends TypeNode {
     }
 
     // get the type
-    public String getType(){
+    public String toString(){
         return "void";
     }
 }
@@ -528,7 +540,7 @@ class StructNode extends TypeNode {
         myId.unparse(p, 0);
     }
 
-    public String getType(){
+    public String toString(){
         return "struct";
     }
     private IdNode myId;
