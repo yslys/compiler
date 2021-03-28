@@ -23,13 +23,12 @@ public class TSym {
  * a subclass of TSym for function declarations
  */
 class FnSym extends TSym{
-    private String retType;
     private LinkedList<String> formalTypeList;
 
-    public FnSym(String retType, LinkedList<String> ftl) {
-        super("function");
-        this.retType = retType;
+    public FnSym(String type, LinkedList<String> ftl) {
+        super(type);
         this.formalTypeList = ftl;
+
     }
 
 }
@@ -43,5 +42,9 @@ class StructDeclSym extends TSym{
     public StructDeclSym(String type, SymTable fields){
         super(type);
         this.fields = fields;
+    }
+
+    public SymTable getSymTable(){
+        return fields;
     }
 }
