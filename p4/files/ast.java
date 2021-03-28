@@ -132,7 +132,8 @@ class ProgramNode extends ASTnode {
     }
 
     // name analysis
-    public void analysis(SymTable t){
+    public void analysis(){
+        SymTable t = new SymTable();
         myDeclList.analysis(t);
     }
 
@@ -282,6 +283,7 @@ class ExpListNode extends ASTnode {
 // **********************************************************************
 
 abstract class DeclNode extends ASTnode {
+    abstract public void analysis(SymTable t);
 }
 
 class VarDeclNode extends DeclNode {
@@ -303,8 +305,7 @@ class VarDeclNode extends DeclNode {
      * name analysis for variable declaration node
      * need to check if it's primitive type or struct type
      */  
-    public void analysis(SymTable t) throws EmptySymTableException, 
-                                                 DuplicateSymException{
+    public void analysis(SymTable t){
         
         // if myType == primitive type
         if(this.mySize == NOT_STRUCT){
@@ -483,11 +484,12 @@ class FormalDeclNode extends DeclNode {
             if(t.lookupLocal(myId.getStrVal()) != null){
                 ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
                         "Multiply declared identifier");
-            }
-            else{ // not found in local scope, add to symtable
+            }
+            else{ // not found in local scope, add to symtable
                 t.addDecl(myId.getStrVal(), new TSym(myType.getStrVal()));
-            }
-        }
+            }
+
+        }
         catch(EmptySymTableException e){
             System.out.println(e);
         }
@@ -495,7 +497,7 @@ class FormalDeclNode extends DeclNode {
         catch(DuplicateSymException d){
             System.out.println(d);
         }
-    }
+    }
 
     private TypeNode myType;
     private IdNode myId;
@@ -531,6 +533,7 @@ class StructDeclNode extends DeclNode {
                 StructDeclSym newStruct = new StructDeclSym("struct", newTable);
 
                 // perform name analysis on the new symTable
+                // eliminates addScope() and removeScope()
                 myDeclList.analysis(newStruct.getSymTable());
                 t.addDecl(myId.getStrVal(), newStruct);
             }
@@ -1041,17 +1044,31 @@ class IdNode extends ExpNode {
     }
 
     public void analysis(SymTable t){
-        // check if id already exists
+        // lookup local first
         try{
-            this.myTSym = t.lookupGlobal(myStrVal);
+            TSym symLocal = t.lookupLocal(this.myStrVal);
+            if(symLocal != null){
+                this.myTSym = symLocal;
+                return;
+            }
         }
         catch(EmptySymTableException e){
             System.out.println(e);
         }
-        if(this.myTSym == null){
-            ErrMsg.fatal(myLineNum, myCharNum, "Undeclared identifer");
+
+        // not found in local, then look up global
+        try{
+            TSym symGlobal = t.lookupGlobal(this.myStrVal);
+            if(symGlobal != null){
+                this.myTSym = symGlobal;
+                return;
+            }
         }
-        // TODO
+        catch(EmptySymTableException e){
+            System.out.println(e);
+        }
+        
+        ErrMsg.fatal(myLineNum, myCharNum, "Undeclared identifer");
     }
 
     private int myLineNum;
@@ -1081,28 +1098,6 @@ class DotAccessExpNode extends ExpNode {
     private IdNode myId;
 }
 
-
-struct b{
-    bool y;
-};
-
-struct a{
-    int aa;
-    int bb;
-    struct b cc;
-}
-
-struct a s;
-s.aa;
-s.cc.y;
-
-myLoc = s/s.cc
-myId = aa/y
-
-
-
-
-
 class AssignNode extends ExpNode {
     public AssignNode(ExpNode lhs, ExpNode exp) {
         myLhs = lhs;
@@ -1115,6 +1110,11 @@ class AssignNode extends ExpNode {
         p.print(" = ");
         myExp.unparse(p, 0);
         if (indent != -1)  p.print(")");
+    }
+
+    public void analysis(SymTable t){
+        myLhs.analysis(t);
+        myExp.analysis(t);
     }
 
     private ExpNode myLhs;
@@ -1133,11 +1133,21 @@ class CallExpNode extends ExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-        LinkedList<String> l = myId.getFnSym().getTypeList()
-        myId.unparse(p, 0);
+        LinkedList<String> l = myId.getSym().getTypeList();
+        // myId.unparse(p, 0);
+        p.print(myId.getStrVal());
         p.print("(");
-        
-
+        for(int i = 0; i < l.size(); i++){
+            if(i == 0){
+                p.print(l.get(i));
+            }
+            else{
+                p.print("," + l.get(i));
+            }
+        }
+        p.print("->");
+        p.print(myId.getSym().getType());
+        p.print(")(");
         
         if (myExpList != null) {
             myExpList.unparse(p, 0);

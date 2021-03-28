@@ -17,6 +17,9 @@ public class TSym {
     public String toString() {
         return type;
     }
+    public LinkedList<String> getTypeList(){
+        return null;
+    }
 }
 
 /**
@@ -29,6 +32,11 @@ class FnSym extends TSym{
         super(type);
         this.formalTypeList = ftl;
 
+    }
+
+    @Override
+    public LinkedList<String> getTypeList(){
+        return formalTypeList;
     }
 
 }
