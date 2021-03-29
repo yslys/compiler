@@ -971,6 +971,9 @@ class ReturnStmtNode extends StmtNode {
 
 abstract class ExpNode extends ASTnode {
     abstract public void analysis(SymTable t);
+    public TSym getSymFromTable(SymTable t){
+        return null;
+    }
 }
 
 class IntLitNode extends ExpNode {
@@ -1126,150 +1129,127 @@ class DotAccessExpNode extends ExpNode {
         myId.unparse(p, 0);
     }
 
-    public TSym getLeftStructDeclSym(SymTable t){
-        if(myLoc instanceof IdNode){
-            try{
-                // System.out.println("myLoc instance of IdNode");
-                // System.out.println("loc: "+((IdNode)myLoc).getStrVal());
-
-                TSym result = t.lookupGlobal(((IdNode)myLoc).getStrVal());
-                if(result == null){
-                    return null;
-                }
-                if(result.isStructVar() == false){
-                    ErrMsg.fatal(((IdNode)myLoc).getLineNum(), 
-                            ((IdNode)myLoc).getCharNum(), 
-                            "1Dot-access of non-struct type");
-                    return null;
-                }
-                // TSym resultParent = t.lookupGlobal(result.getType());
-                // if(resultParent == null){
-                //     ErrMsg.fatal(((IdNode)myLoc).getLineNum(), 
-                //             ((IdNode)myLoc).getCharNum(), 
-                //             "Dot-access of non-struct type");
-                //     return null;
-                // }
-                // if(result.getType().equals(resultParent.getStructName()) == false){
-                    
-                // }
-            
-                // System.out.println("result gettype: " + result.getType());
-                // System.out.println(resultParent.getStructName());
-                // System.out.println("resultParent gettype: " + resultParent.getType());
-
-                return result;
-            }
-            catch(EmptySymTableException e){
-                System.out.println(e);
-            }
-        }
-        else{ // DotAccessExpNode
-            // System.out.println("myLoc instance of DotAccessExpNode");
-            
-            TSym lhs = ((DotAccessExpNode)myLoc).getLeftStructDeclSym(t);
-            if(lhs == null){
-                // ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
-				// 				"2Dot-access of non-struct type");
-                return null;
-            }
-            if(lhs.isStructVar()){
-                try{
-                    TSym sym = t.lookupGlobal(lhs.getStructName());
-                    if(sym == null){
-                        ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
-                                "1Invalid struct field name");
-                        return null;
-                    }
-                    if(sym.hasEmptySymTable()){
-                        ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
-                                "Invalid struct field name");
-                        return null;
-                    }
-                    SymTable tLeft = sym.getSymTable();
-                    
-                    TSym result = tLeft.lookupLocal(
-                            ((DotAccessExpNode)myLoc).myId.getStrVal());
-                    if(result == null){
-                        ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
-                                "Invalid struct field name");
-                        return null;
-                    }
-                    else{
-                        return result;
-                    }
-                }
-                catch(EmptySymTableException e){
-                    System.out.println(e);
-                }
-                
-            }
-            
-            // SymTable tLeft = lhs.getSymTable();
-            // if(tLeft == null){
-            //         ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
-			// 					"3Dot-access of non-struct type");
-                
-            //     return null;
-            // }
-            // try{
-            //     TSym result = tLeft.lookupGlobal(((DotAccessExpNode)myLoc)
-            //                        .myId.getStrVal());
-            //     if(result == null){
-            //         ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
-			// 					"Invalid struct field name");
-            //         return null;
-            //     }
-            //     if(result.getType().equals("struct") == false){
-            //         ErrMsg.fatal(((IdNode)myLoc).getLineNum(), 
-            //                 ((IdNode)myLoc).getCharNum(), 
-            //                 "4Dot-access of non-struct type");
-            //         return null;
-            //     }
-
-            //     return result;
-            // }
-            // catch(EmptySymTableException e){
-            //     System.out.println(e);
-            // }  
-        }
-        return null;
-    }
-
 
     public void analysis(SymTable t){
         // myLoc can be either IdNode or DotAccessExpNode
         // do name anlaysis on myLoc first
         myLoc.analysis(t);
-        TSym lhs = getLeftStructDeclSym(t);
-        if(lhs == null){
-            // ErrMsg.fatal(myId.getLineNum(), 
-            //                 myId.getCharNum(), 
-            //                 "5Dot-access of non-struct type");
-            return;
-        }
-
-        // System.out.println(lhs.getType()); // Point
+        // TSym lhs = getLeftStructDeclSym(t);
+        
+       
+        // if(lhs == null){
+        //     // error already printed, no need here
+        //     return;
+        // }
         // System.out.println(lhs.getStructName()); // null
         // System.out.println(lhs.isStruct());
         // SymTable parentSymTable = lhs.getSymTable();
 
         // check if myId is the field of parentSymTable
         try{
-            TSym parentOfLhs = t.lookupGlobal(lhs.getType());
-            SymTable parentSymTable = parentOfLhs.getSymTable();
             
-            // System.out.println("myId.getStrval: " + myId.getStrVal());
-            // parentSymTable.print();
-            TSym result = parentSymTable.lookupGlobal(myId.getStrVal());
-            if(result == null){
+            
+
+            if(myLoc instanceof IdNode){
+                IdNode lhs = (IdNode)myLoc;
+                TSym result = lhs.getSym();
+                if(result == null){
+                    ErrMsg.fatal(((IdNode)myLoc).getLineNum(), 
+                            ((IdNode)myLoc).getCharNum(), 
+                            "Undeclared identifer");
+                    return ;
+                }
+
+                TSym resultParent = t.lookupGlobal(result.getType());
+                if(resultParent == null){
+                    ErrMsg.fatal(((IdNode)myLoc).getLineNum(), 
+                            ((IdNode)myLoc).getCharNum(), 
+                            "Dot-access of non-struct type");
+                    return ;
+                }
+
+                SymTable table = resultParent.getSymTable();
+            TSym IdResult = table.lookupGlobal(myId.getStrVal());
+            if(IdResult == null){
                 ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
                                     "Invalid struct field name");
             }
+            }
+            else if(myLoc instanceof DotAccessExpNode){
+                DotAccessExpNode castedLoc = (DotAccessExpNode) myLoc;
+                TSym result = castedLoc.getSym(t);
+                if(result == null){
+                    ErrMsg.fatal(castedLoc.getLineNum(), 
+                            castedLoc.getCharNum(), 
+                            "Undeclared identifer");
+                    return ;
+                }
+
+                TSym resultParent = t.lookupGlobal(result.getType());
+                if(resultParent == null){
+                    ErrMsg.fatal(castedLoc.getLineNum(), 
+                            castedLoc.getCharNum(), 
+                            "Dot-access of non-struct type");
+                    return ;
+                }
+
+                SymTable table = resultParent.getSymTable();
+            TSym IdResult = table.lookupGlobal(myId.getStrVal());
+            if(IdResult == null){
+                ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
+                                    "Invalid struct field name");
+            }
+            }
+
+           
+
+            // TSym resultParent = t.lookupGlobal(result.getType());
+            // if(resultParent == null){
+            //         ErrMsg.fatal(((IdNode)myLoc).getLineNum(), 
+            //                 ((IdNode)myLoc).getCharNum(), 
+            //                 "Dot-access of non-struct type");
+            //         return ;
+            // }
+            // if(result.getType().equals(resultParent.getStructName()) == false){
+            //     ErrMsg.fatal(((IdNode)myLoc).getLineNum(), 
+            //             ((IdNode)myLoc).getCharNum(), 
+            //             "Dot-access of non-struct type");
+            //     return ;
+            // }
+
+            // SymTable table = resultParent.getSymTable();
+            // TSym IdResult = table.lookupGlobal(myId.getStrVal());
+            // if(IdResult == null){
+            //     ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
+            //                         "Invalid struct field name");
+            // }
+            // TSym parentOfLhs = t.lookupGlobal(lhs.getType());
+            // SymTable parentSymTable = parentOfLhs.getSymTable();
+            
+            // System.out.println("myId.getStrval: " + myId.getStrVal());
+            // // parentSymTable.print();
+            // TSym result = parentSymTable.lookupGlobal(myId.getStrVal());
+            // if(result == null){
+            //     ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
+            //                         "Invalid struct field name");
+            // }
         }
         catch(EmptySymTableException e){
             System.out.println(e);
         }
         
+    }
+
+    public TSym getSym(SymTable t){
+        return myId.getSym();
+    }
+
+    public int getLineNum() {
+        return myId.getLineNum();
+    }
+
+    public int getCharNum() {
+        return myId.getCharNum();
     }
 
     private ExpNode myLoc;
