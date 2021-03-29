@@ -1178,6 +1178,7 @@ class DotAccessExpNode extends ExpNode {
             else if(myLoc instanceof DotAccessExpNode){
                 DotAccessExpNode castedLoc = (DotAccessExpNode) myLoc;
                 TSym result = castedLoc.getSym(t);
+                System.out.println();
                 if(result == null){
                     ErrMsg.fatal(castedLoc.getLineNum(), 
                             castedLoc.getCharNum(), 
