@@ -4,5 +4,18 @@ struct i {
 struct j {
     struct i iField;
 };
+struct k {
+    struct j jField;
+};
+struct l {
+    int i;
+    struct k kField;
+};
 
-
+void fun() {
+    struct l r;
+    f = r.kField.j; // j is not a field name of k
+    f = r.kField.j.k; // same thing
+    f = r.i.j; // dot access of int
+    f = r.i.j.k; // same thing
+}

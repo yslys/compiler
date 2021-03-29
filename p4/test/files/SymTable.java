@@ -76,4 +76,19 @@ public class SymTable {
     System.out.println();
   }
 
+  // get current scope
+  public SymTable getCurrentScope() throws EmptySymTableException {
+    if (this.list.isEmpty()){
+      throw new EmptySymTableException();
+    }
+            
+    SymTable table = new SymTable();
+
+    HashMap<String, TSym> tmp = this.list.get(0);
+
+    table.list.add(tmp);
+
+    return table;
+  }
+
 }

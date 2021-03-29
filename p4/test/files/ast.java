@@ -551,17 +551,25 @@ class StructDeclNode extends DeclNode {
 						"Multiply declared identifier");
             }
             else{ 
-                
+                t.addScope();
+                myDeclList.analysis(t);
+
+
+
+                SymTable newTable = new SymTable();
+                newTable = t.getCurrentScope();
 
                 // new a StructDeclSym, a symTable, add to current scope
                 TSym newSym = new TSym("struct");
                 // t.addDecl(myId.getStrVal(), newSym);
-                SymTable newTable = new SymTable();
+                
                 newSym.setSymTable(newTable);
                 newSym.setStruct();
                 newSym.setStructName(myId.getStrVal());
-                myDeclList.analysis(newTable);
+                
+                t.removeScope();
                 t.addDecl(myId.getStrVal(), newSym);
+                
                 // perform name analysis on the new symTable
                 // eliminates addScope() and removeScope()
                 
