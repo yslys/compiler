@@ -1,0 +1,5 @@
+program parsed correctly.
+4:21 ***ERROR*** Invalid name of struct type
+4:21 ***ERROR*** Multiply decalred identifier
+5:20 ***ERROR*** Invalid name of struct type
+5:20 ***ERROR*** Multiply decalred identifier
