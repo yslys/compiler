@@ -1,114 +1,72 @@
 int a;
-int undec_struc;
-
-struct undec_struct a;  // Invalid name of struct type
-struct undec_struc a;               // Invalid name of struct type
-                                     // Multiply declared identifier
-
-int a;
-struct test_struct {
-  int size;
+int a; // multiply declared identifier
+bool a; // multiply declared identifier
+void a; // non-function declared void + multiply declared identifier
+struct struct_a a; // invalid name of struct type + multiply declared identifier
+void a(){} //multiply declared identifier
+struct a { // multiply declared identifier
+    int x;
 };
-void func() {}
 
-// Multiply declared identifier
+int a(int a, bool a){} // 2* multiply declared identifier
+int a(int a, bool a){} // same as the above line
+int a(int a, bool b, int c){} // multiply declared identifier
+int func(int a, bool a){} // multiply declared identifier
+int func(int x, int y){
+    int x; // multiply declared identifier
+    int y; // multiply declared identifier
+    int a;
+    bool a; // multiply declared identifier
+    void a; // non-function declared void + multiply declared identifier
+    void x; // non-function declared void + multiply declared identifier
+    
+    
+    b = a; // undeclared identifier
+    a = z; // undeclared identifier
+    unknown1 = unknown2; // 2 * undeclared identifier
+    unknown1 = unknown2 + unknown3 * unknown4; // 3 * undeclared identifier
 
-int mul_var;                     //
-int mul_var;                     // Multiply declared identifier
-bool mul_var;                    // Multiply declared identifier
-int mul_var() {}                 // Multiply declared identifier
-struct mul_var {                 // Multiply declared identifier
-  int mul_var;                   //
-};                               //
-int mul_var() {}                 // Multiply declared identifier
-int mul_func() {}                //
-int mul_func() {}                // Multiply declared identifier
-int mul_formal(int a, int a) {}  // Multiply declared identifier
-struct mul_struct {              //
-  int mul_var;                   //
-  int mul_var;                   // Multiply declared identifier
-  bool mul_var;                  // Multiply declared identifier
-  void mul_var;  // Multiply declared identifier + Non-function declared void
-};               //
-struct mul_struct {  // Multiply declared identifier
-  int mul_var;       //
-  bool mul_var;      // Multiply declared identifier
-};                   //
-int mul_body() {     //
-  int mul_var;       //
-  int mul_var;       // Multiply declared identifier
-  int a;             //
-  int a;             // Multiply declared identifier
+    foo_undefined(); // undeclared identifier
+    foo_undefined(unknown1, unknown2); // 3 * undeclared identifier
+    unknown = foo_undefined(unknown1, unknown2, unknown3); // 5 * undeclared identifier
 }
 
-// Undeclared identifier
+struct errorStruct{
+    int a;
+    bool a; // multiply declared identifier
+    void a; // non-function declared void + multiply declared identifier
+    void x; // non-function declared void
+};
 
-int test_undec() {
-  // undeclared var
-  a = undec_var;                      // Undeclared identifier
-  undec_var = a;                      // Undeclared identifier
-  undec_var = undec_var;              // Undeclared identifier * 2
-  a = undec_var + a;                  // Undeclared identifier
-  undec_var = undec_var - undec_var;  // Undeclared identifier * 3
-
-  // undeclared func
-  undec_func();                          // Undeclared identifier
-  a = undec_func(a);                     // Undeclared identifier
-  undec_func(undec_func(undec_func()));  // Undeclared identifier * 3
-}
-
-// Dot-access of non-struct type
-int test_dot_access() {
-  a = a.b;      // Dot-access of non-struct type
-  a.b = a;      // Dot-access of non-struct type
-  a = a.b.c.d;  // Dot-access of non-struct type * 3
-  a = func.a;   // Dot-access of non-struct type
-}
-
-// Invalid struct field name
-int test_struct_function() {
-  struct test_struct struct_var;
-  a = struct_var.not_a_field;  // Invalid struct field name
-}
-
-// Non-function declared void
-
-void void_var;                    // Non-function declared void
-void mul_var;                     // Non-function declared void
-                                  // Multiply declared identifier
-struct void_struct {              //
-  void mul_var;                   // Non-function declared void
-};                                //
-int void_formal(void void_var) {  // Non-function declared void
-  void a;                         // Non-function declared void
-  void a;                         // Non-function declared void
-                                  // Multiply declared identifier
-}
-
-// Invalid name of struct type
-
-struct undec_struct bad_struct_var;  // Invalid name of struct type
-struct undec_struct a;               // Invalid name of struct type
-                                     // Multiply declared identifier
-
-struct i {
+struct A {
     int a;
 };
-struct j {
-    struct i iField;
+struct B {
+    struct A a;
 };
-struct k {
-    struct j jField;
+struct C {
+    struct B b;
 };
-struct l {
-    int i;
-    struct k kField;
+struct D {
+    int integer;
+    struct C c;
 };
 
-void fun() {
-    struct l r;
-    f = r.kField.j; // j is not a field name of k
-    f = r.kField.j.k; // same thing
-    f = r.i.j; // dot access of int
-    f = r.i.j.k; // same thing
+// error testing for dotaccess
+void foo() {
+    int a;
+    int b;
+    struct D r;
+    int r; // multiply declared identifier
+    
+    x = r.c.b;   // undeclared identifier
+    r = r.c.b.B; // invalid struct field name
+    r = r.c.b.B.x.a.c; // invalid struct field name
+    x = r.integer.b; // undeclared identifier + dot access of non-struct
+    r = r.integer.b.c.t; // dot access of non-struct type ONLY once
+
+    m = n.z.y; // 2 * undeclared identifier
 }
+
+struct undeclaredStruct wrongStruct;  // Invalid name of struct type
+struct wrongStruct a; // Invalid name of struct type + Multiply declared identifier

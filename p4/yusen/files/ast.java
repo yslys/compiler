@@ -1141,29 +1141,6 @@ class DotAccessExpNode extends ExpNode {
         // myLoc can be either IdNode or DotAccessExpNode
         // do name anlaysis on myLoc first
         myLoc.analysis(t);
-        // if(myLoc instanceof IdNode){
-        //     IdNode newNode = (IdNode)myLoc;
-        //     try{
-        //         TSym lhsSym = t.lookupGlobal(newNode.getStrVal());
-        //         if(lhsSym == null){
-        //             ErrMsg.fatal(newNode.getLineNum(), newNode.getCharNum(), 
-        //                     "Undeclared identifier");
-        //             return;
-        //         } 
-                
-        //         if(lhsSym.isStructVar() == false){
-        //             ErrMsg.fatal(newNode.getLineNum(), newNode.getCharNum(), 
-        //                     "Dot-access of non-struct type");
-        //             return;
-        //         }
-
-        //         // now, lhs is struct var, get its struct decl sym
-        //         TSym lhsParentSym = t.lookupGlobal(lhsSym.getStructName());
-
-
-        //     }
-
-        // }
 
         TSym symGot = myLoc.getSymFromTable(t);
         if(symGot == null){
@@ -1189,6 +1166,20 @@ class DotAccessExpNode extends ExpNode {
         try{
             // get parent - StructDecl Sym
             TSym lhsParentSym = t.lookupGlobal(lhsSym.getType());
+            if(lhsParentSym == null){
+                if(myLoc instanceof IdNode){
+                    IdNode newNode = (IdNode)myLoc;
+                    ErrMsg.fatal(newNode.getLineNum(), newNode.getCharNum(), 
+                            "Dot-access of non-struct type");
+                }
+                else if(myLoc instanceof DotAccessExpNode){
+                    DotAccessExpNode newNode = (DotAccessExpNode)myLoc;
+                    ErrMsg.fatal(newNode.getLineNum(), newNode.getCharNum(), 
+                            "Dot-access of non-struct type");
+                }
+
+                return;
+            }
             // get table of parent
             SymTable parentFields = lhsParentSym.getSymTable();
             // lookup in parent table

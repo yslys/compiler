@@ -1,57 +1,56 @@
 program parsed correctly.
-4:21 ***ERROR*** Invalid name of struct type
-4:21 ***ERROR*** Multiply decalred identifier
-5:20 ***ERROR*** Invalid name of struct type
-5:20 ***ERROR*** Multiply decalred identifier
-8:5 ***ERROR*** Multiply declared identifier
-17:5 ***ERROR*** Multiply declared identifier
-18:6 ***ERROR*** Multiply declared identifier
-19:5 ***ERROR*** Multiply declared identifier
-20:8 ***ERROR*** Multiply declared identifier
-23:5 ***ERROR*** Multiply declared identifier
-25:5 ***ERROR*** Multiply declared identifier
-26:27 ***ERROR*** Multiply declared identifier
-29:7 ***ERROR*** Multiply declared identifier
-30:8 ***ERROR*** Multiply declared identifier
-31:8 ***ERROR*** Non-Function declared void
-31:8 ***ERROR*** Multiply declared identifier
-33:8 ***ERROR*** Multiply declared identifier
-39:7 ***ERROR*** Multiply declared identifier
-41:7 ***ERROR*** Multiply declared identifier
-48:7 ***ERROR*** Undeclared identifer
-49:3 ***ERROR*** Undeclared identifer
-50:3 ***ERROR*** Undeclared identifer
-50:15 ***ERROR*** Undeclared identifer
-51:7 ***ERROR*** Undeclared identifer
-52:3 ***ERROR*** Undeclared identifer
-52:15 ***ERROR*** Undeclared identifer
-52:27 ***ERROR*** Undeclared identifer
-55:3 ***ERROR*** Undeclared identifer
-56:7 ***ERROR*** Undeclared identifer
-57:3 ***ERROR*** Undeclared identifer
-57:14 ***ERROR*** Undeclared identifer
-57:25 ***ERROR*** Undeclared identifer
-62:7 ***ERROR*** Dot-access of non-struct type
-63:3 ***ERROR*** Dot-access of non-struct type
-64:7 ***ERROR*** Dot-access of non-struct type
-65:7 ***ERROR*** Dot-access of non-struct type
-71:18 ***ERROR*** Invalid struct field name
-76:6 ***ERROR*** Non-Function declared void
-77:6 ***ERROR*** Non-Function declared void
-77:6 ***ERROR*** Multiply declared identifier
-80:8 ***ERROR*** Non-Function declared void
-82:22 ***ERROR*** Non-Function declared void
-83:8 ***ERROR*** Non-Function declared void
-84:8 ***ERROR*** Non-Function declared void
-84:8 ***ERROR*** Multiply declared identifier
-90:21 ***ERROR*** Invalid name of struct type
-91:21 ***ERROR*** Invalid name of struct type
-91:21 ***ERROR*** Multiply decalred identifier
-110:5 ***ERROR*** Undeclared identifer
-110:18 ***ERROR*** Invalid struct field name
-111:5 ***ERROR*** Undeclared identifer
-111:18 ***ERROR*** Invalid struct field name
-112:5 ***ERROR*** Undeclared identifer
-112:11 ***ERROR*** Dot-access of non-struct type
-113:5 ***ERROR*** Undeclared identifer
-113:11 ***ERROR*** Dot-access of non-struct type
+2:5 ***ERROR*** Multiply declared identifier
+3:6 ***ERROR*** Multiply declared identifier
+4:6 ***ERROR*** Non-Function declared void
+4:6 ***ERROR*** Multiply declared identifier
+5:17 ***ERROR*** Invalid name of struct type
+5:17 ***ERROR*** Multiply decalred identifier
+6:6 ***ERROR*** Multiply declared identifier
+7:8 ***ERROR*** Multiply declared identifier
+11:5 ***ERROR*** Multiply declared identifier
+11:19 ***ERROR*** Multiply declared identifier
+12:5 ***ERROR*** Multiply declared identifier
+12:19 ***ERROR*** Multiply declared identifier
+13:5 ***ERROR*** Multiply declared identifier
+14:22 ***ERROR*** Multiply declared identifier
+15:5 ***ERROR*** Multiply declared identifier
+16:9 ***ERROR*** Multiply declared identifier
+17:9 ***ERROR*** Multiply declared identifier
+19:10 ***ERROR*** Multiply declared identifier
+20:10 ***ERROR*** Non-Function declared void
+20:10 ***ERROR*** Multiply declared identifier
+21:10 ***ERROR*** Non-Function declared void
+21:10 ***ERROR*** Multiply declared identifier
+24:5 ***ERROR*** Undeclared identifer
+25:9 ***ERROR*** Undeclared identifer
+26:5 ***ERROR*** Undeclared identifer
+26:16 ***ERROR*** Undeclared identifer
+27:5 ***ERROR*** Undeclared identifer
+27:16 ***ERROR*** Undeclared identifer
+27:27 ***ERROR*** Undeclared identifer
+27:38 ***ERROR*** Undeclared identifer
+29:5 ***ERROR*** Undeclared identifer
+30:5 ***ERROR*** Undeclared identifer
+30:19 ***ERROR*** Undeclared identifer
+30:29 ***ERROR*** Undeclared identifer
+31:5 ***ERROR*** Undeclared identifer
+31:15 ***ERROR*** Undeclared identifer
+31:29 ***ERROR*** Undeclared identifer
+31:39 ***ERROR*** Undeclared identifer
+31:49 ***ERROR*** Undeclared identifer
+36:10 ***ERROR*** Multiply declared identifier
+37:10 ***ERROR*** Non-Function declared void
+37:10 ***ERROR*** Multiply declared identifier
+38:10 ***ERROR*** Non-Function declared void
+60:9 ***ERROR*** Multiply declared identifier
+62:5 ***ERROR*** Undeclared identifer
+63:15 ***ERROR*** Invalid struct field name
+64:15 ***ERROR*** Invalid struct field name
+65:5 ***ERROR*** Undeclared identifer
+65:11 ***ERROR*** Dot-access of non-struct type
+66:11 ***ERROR*** Dot-access of non-struct type
+68:5 ***ERROR*** Undeclared identifer
+68:9 ***ERROR*** Undeclared identifer
+71:25 ***ERROR*** Invalid name of struct type
+72:20 ***ERROR*** Invalid name of struct type
+72:20 ***ERROR*** Multiply decalred identifier
