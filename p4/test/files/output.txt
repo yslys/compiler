@@ -1,0 +1,10 @@
+java -cp ./deps:. P4 nameErrors.cminusminus nameErrors.out
+program parsed correctly.
+java -cp ./deps:. P4 test.cminusminus test.out
+program parsed correctly.
+java -cp ./deps:. P4 nameErrors.cminusminus nameErrors.out
+program parsed correctly.
+java -cp ./deps:. P4 test.cminusminus test.out
+program parsed correctly.
+
+                

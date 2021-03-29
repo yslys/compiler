@@ -332,7 +332,9 @@ class VarDeclNode extends DeclNode {
                         "Multiply declared identifier");
                 }
                 else { // not found in local scope
-                    t.addDecl(myId.getStrVal(), new TSym(myType.getStrVal()));
+                    TSym newSym = new TSym(myType.getStrVal());
+                    newSym.setVar();
+                    t.addDecl(myId.getStrVal(), newSym);
                 }
 
             }
@@ -347,16 +349,25 @@ class VarDeclNode extends DeclNode {
         else{
             try{
                 // if this struct has not been declared earlier, fatal
+                // int node
+                // struct node {};
+                // struct node n; myType = node, myId = n
+                System.out.println("start new stuct var decl:");
+                t.print();
                 System.out.println(myType.getStrVal());
                 System.out.println(myId.getStrVal());
-                
-                
-                
-                if(t.lookupGlobal(myType.getStrVal()) == null
-                    || t.lookupGlobal(myType.getStrVal()).getType()
-                                                       .equals("struct") == false){
+                TSym sym = t.lookupGlobal(myType.getStrVal());
+                if(sym == null){
+                    System.out.println("NNNNOT found");
                     ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
                             "Invalid name of struct type");
+                    return;
+                }
+                // now, sym != null
+                if(sym.isStruct() == false){
+                    ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
+                            "Invalid name of struct type");
+                    return;
                 }
 
                 /**
@@ -370,7 +381,9 @@ class VarDeclNode extends DeclNode {
                 }
                 // else, add to symtable
                 else{
-                    t.addDecl(myId.getStrVal(), new TSym(myType.getStrVal()));
+                    TSym newSym = new TSym(myType.getStrVal());
+                    newSym.setVar();
+                    t.addDecl(myId.getStrVal(), newSym);
                 }
             }
             catch(EmptySymTableException e){
@@ -425,8 +438,10 @@ class FnDeclNode extends DeclNode {
             else{
                 // new a FnSym struct which contains a field - formal list
                 LinkedList<String> l = myFormalsList.getFormalTypeList();
-
-                t.addDecl(myId.getStrVal(), new FnSym(myType.getStrVal(), l));
+                TSym newSym = new TSym(myType.getStrVal());
+                newSym.setFunc(); // isFunc = true
+                newSym.setTypeList(l);
+                t.addDecl(myId.getStrVal(), newSym);
             }
         }
         catch(EmptySymTableException e){
@@ -492,7 +507,9 @@ class FormalDeclNode extends DeclNode {
                         "Multiply declared identifier");
             }
             else{ // not found in local scope, add to symtable
-                t.addDecl(myId.getStrVal(), new TSym(myType.getStrVal()));
+                TSym newSym = new TSym(myType.getStrVal());
+                newSym.setVar();
+                t.addDecl(myId.getStrVal(), newSym);
             }
 
         }
@@ -534,15 +551,27 @@ class StructDeclNode extends DeclNode {
 						"Multiply declared identifier");
             }
             else{ 
-                // new a StructDeclSym, a symTable, add to current scope
-                SymTable newTable = new SymTable();
-                StructDeclSym newStruct = new StructDeclSym("struct", myId.getStrVal(), newTable);
+                
 
+                // new a StructDeclSym, a symTable, add to current scope
+                TSym newSym = new TSym("struct");
+                // t.addDecl(myId.getStrVal(), newSym);
+                SymTable newTable = new SymTable();
+                newSym.setSymTable(newTable);
+                newSym.setStruct();
+                newSym.setStructName(myId.getStrVal());
+                myDeclList.analysis(newTable);
+                t.addDecl(myId.getStrVal(), newSym);
                 // perform name analysis on the new symTable
                 // eliminates addScope() and removeScope()
-                myDeclList.analysis(newStruct.getSymTable());
-                t.addDecl(myId.getStrVal(), newStruct);
-
+                
+                
+                // myDeclList.analysis(newTable);
+                
+                System.out.println("added struct decl: struct "+myId.getStrVal());
+                System.out.println("now, symtable is:");
+                t.print();
+                System.out.println("finished");
             }
         }
         catch(EmptySymTableException e){
@@ -565,7 +594,7 @@ class StructDeclNode extends DeclNode {
 abstract class TypeNode extends ASTnode {
     // every subclass must provide a getStrVal operation 
     abstract public String getStrVal();
-    abstract public TSym getSym();
+
 }
 
 class IntNode extends TypeNode {
@@ -581,9 +610,6 @@ class IntNode extends TypeNode {
         return "int";
     }
 
-    public TSym getSym(){
-        return new TSym("int");
-    }
 }
 
 class BoolNode extends TypeNode {
@@ -599,10 +625,6 @@ class BoolNode extends TypeNode {
         return "bool";
     }
 
-    public TSym getSym(){
-        
-        return new TSym("bool");
-    }
 }
 
 class VoidNode extends TypeNode {
@@ -618,9 +640,6 @@ class VoidNode extends TypeNode {
         return "void";
     }
 
-    public TSym getSym(){
-        return new TSym("void");
-    }
 }
 
 class StructNode extends TypeNode {
@@ -635,10 +654,6 @@ class StructNode extends TypeNode {
 
     public String getStrVal(){
         return myId.getStrVal();
-    }
-
-    public TSym getSym(){
-        return new TSym("struct");
     }
 
     public void analysis(SymTable t){
@@ -1125,19 +1140,22 @@ class DotAccessExpNode extends ExpNode {
                     return null;
                 }
                 TSym resultParent = t.lookupGlobal(result.getType());
-                if(resultParent instanceof StructDeclSym){
-                    if(result.getType().equals(((StructDeclSym)resultParent).getStructName()) == false){
-                        ErrMsg.fatal(((IdNode)myLoc).getLineNum(), 
-                                ((IdNode)myLoc).getCharNum(), 
-                                "Dot-access of non-struct type");
-                        return null;
-                    }
+                if(resultParent == null){
+                    ErrMsg.fatal(((IdNode)myLoc).getLineNum(), 
+                            ((IdNode)myLoc).getCharNum(), 
+                            "Dot-access of non-struct type");
+                    return null;
                 }
+                if(result.getType().equals(resultParent.getStructName()) == false){
+                    ErrMsg.fatal(((IdNode)myLoc).getLineNum(), 
+                            ((IdNode)myLoc).getCharNum(), 
+                            "Dot-access of non-struct type");
+                    return null;
+                }
+            
                 // System.out.println("result gettype: " + result.getType());
                 // System.out.println(resultParent.getStructName());
                 // System.out.println("resultParent gettype: " + resultParent.getType());
-                
-                
 
                 return result;
             }
@@ -1186,9 +1204,18 @@ class DotAccessExpNode extends ExpNode {
             return;
         }
 
-        SymTable parentSymTable = ((StructDeclSym)lhs).getSymTable();
+        // System.out.println(lhs.getType()); // Point
+        // System.out.println(lhs.getStructName()); // null
+        // System.out.println(lhs.isStruct());
+        // SymTable parentSymTable = lhs.getSymTable();
+
         // check if myId is the field of parentSymTable
         try{
+            TSym parentOfLhs = t.lookupGlobal(lhs.getType());
+            SymTable parentSymTable = parentOfLhs.getSymTable();
+            
+            // System.out.println("myId.getStrval: " + myId.getStrVal());
+            // parentSymTable.print();
             TSym result = parentSymTable.lookupGlobal(myId.getStrVal());
             if(result == null){
                 ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 

@@ -76,5 +76,4 @@ public class SymTable {
     System.out.println();
   }
 
-
 }

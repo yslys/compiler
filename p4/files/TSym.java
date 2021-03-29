@@ -20,6 +20,13 @@ public class TSym {
     public LinkedList<String> getTypeList(){
         return null;
     }
+
+    public SymTable getSymTable(){
+        return null;
+    }
+    public String getStructName(){
+        return null;
+    }
 }
 
 /**
@@ -45,13 +52,20 @@ class FnSym extends TSym{
  * a subclass of TSym for struct declarations
  */
 class StructDeclSym extends TSym{
+    String name;
     SymTable fields;
 
-    public StructDeclSym(String type, SymTable fields){
+    public StructDeclSym(String type, String name, SymTable fields){
         super(type);
+        this.name = name;
         this.fields = fields;
     }
 
+    @Override
+    public String getStructName(){
+        return name;
+    }
+    @Override
     public SymTable getSymTable(){
         return fields;
     }
