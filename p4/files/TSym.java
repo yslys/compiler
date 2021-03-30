@@ -1,13 +1,26 @@
 import java.util.*;
 
-/**
- * TSym class - for variable definitions
- */
+
 public class TSym {
     private String type;
+    private LinkedList<String> formalTypeList; // FnSym
+    private String structName; // struct decl
+    private SymTable fields; // struct decl
+
+    private boolean isVar; //VarSym
+    private boolean isFunc; // FnSym
+    private boolean isStruct; // struct decl
+    private boolean isStructVar; // struct node_t a;
     
     public TSym(String type) {
         this.type = type;
+        this.formalTypeList = null;
+        this.structName = null;
+        this.fields = null;
+        this.isVar = false;
+        this.isFunc = false;
+        this.isStruct = false;
+        this.isStructVar = false;
     }
 
     public String getType() {
@@ -17,56 +30,67 @@ public class TSym {
     public String toString() {
         return type;
     }
-    public LinkedList<String> getTypeList(){
-        return null;
-    }
 
-    public SymTable getSymTable(){
-        return null;
-    }
-    public String getStructName(){
-        return null;
-    }
-}
-
-/**
- * a subclass of TSym for function declarations
- */
-class FnSym extends TSym{
-    private LinkedList<String> formalTypeList;
-
-    public FnSym(String type, LinkedList<String> ftl) {
-        super(type);
-        this.formalTypeList = ftl;
-
-    }
-
-    @Override
     public LinkedList<String> getTypeList(){
         return formalTypeList;
     }
 
-}
-
-/**
- * a subclass of TSym for struct declarations
- */
-class StructDeclSym extends TSym{
-    String name;
-    SymTable fields;
-
-    public StructDeclSym(String type, String name, SymTable fields){
-        super(type);
-        this.name = name;
-        this.fields = fields;
+    public void setTypeList(LinkedList<String> l){
+        this.formalTypeList = l;
     }
 
-    @Override
     public String getStructName(){
-        return name;
+        return structName;
     }
-    @Override
+
+    public void setStructName(String s){
+        this.structName = s;
+    }
+
     public SymTable getSymTable(){
-        return fields;
+        return this.fields;
     }
+
+    public void setSymTable(SymTable t){
+        this.fields = t;
+    }
+
+    public void setVar(){
+        this.isVar = true;
+    }
+
+    public void setFunc(){
+        this.isFunc = true;
+    }
+
+    public void setStruct(){
+        this.isStruct = true;
+    }
+
+    public void setStructVar(){
+        this.isStructVar = true;
+    }
+
+    public boolean isStruct(){
+        if(this.isStruct){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isStructVar(){
+        if(this.isStructVar){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasEmptySymTable(){
+        if(this.fields == null){
+            return true;
+        }
+        return false;
+    }
+    
 }
+

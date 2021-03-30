@@ -15,6 +15,7 @@ class ErrMsg {
      */
     static void fatal(int lineNum, int charNum, String msg) {
         System.err.println(lineNum + ":" + charNum + " ***ERROR*** " + msg);
+        System.out.println(lineNum + ":" + charNum + " ***ERROR*** " + msg);
         toQuit = true;
     }
 

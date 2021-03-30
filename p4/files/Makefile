@@ -52,8 +52,9 @@ EmptySymTableException.class: EmptySymTableException.java
 
 ##test
 test:
-	java -cp $(CP) P4 nameErrors.cminusminus nameErrors.out
+	java -cp $(CP) P4 nameErrors.cminusminus nameErrors.out > nameErrors.out
 	java -cp $(CP) P4 test.cminusminus test.out
+
 
 ###
 # clean
