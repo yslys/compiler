@@ -11,6 +11,7 @@ struct a { // multiply declared identifier
 int a(int a, bool a){} // 2* multiply declared identifier
 int a(int a, bool a){} // same as the above line
 int a(int a, bool b, int c){} // multiply declared identifier
+int validFunc(void m){} // non-function declared void
 int func(int a, bool a){} // multiply declared identifier
 int func(int x, int y){
     int x; // multiply declared identifier
@@ -70,3 +71,21 @@ void foo() {
 
 struct undeclaredStruct wrongStruct;  // Invalid name of struct type
 struct wrongStruct a; // Invalid name of struct type + Multiply declared identifier
+
+void q; // non-function declared void
+int q;
+void q; // non-function declared void + multiply declared identifier
+
+void funTest(void q, int q, void q) { // non-function declared void * 2 + multiply declared identifier
+    return;
+}
+
+struct Node {
+    int x;
+    int y;
+};
+
+int main() {
+    int Node;
+    struct Node t; // invalid name of struct type due to overwritten
+}

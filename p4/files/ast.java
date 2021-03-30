@@ -332,9 +332,11 @@ class VarDeclNode extends DeclNode {
                         "Multiply declared identifier");
                 }
                 else { // not found in local scope
-                    TSym newSym = new TSym(myType.getStrVal());
-                    newSym.setVar();
-                    t.addDecl(myId.getStrVal(), newSym);
+                    if(myType.getStrVal().equals("void") == false){
+                        TSym newSym = new TSym(myType.getStrVal());
+                        newSym.setVar();
+                        t.addDecl(myId.getStrVal(), newSym);
+                    }
                 }
 
             }
@@ -355,14 +357,23 @@ class VarDeclNode extends DeclNode {
 
                 TSym sym = t.lookupGlobal(myType.getStrVal());
                 if(sym == null){
-                    ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
-                            "Invalid name of struct type");
+                    if(myType instanceof StructNode){
+                        StructNode newNode = (StructNode)myType;
+                        ErrMsg.fatal(newNode.getId().getLineNum(),
+                                        newNode.getId().getCharNum(),
+                                        "Invalid name of struct type");
+                    }
+                    
                     // return;
                 }
                 // now, sym != null
                 if(sym != null && sym.isStruct() == false){
-                    ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
-                            "Invalid name of struct type");
+                    if(myType instanceof StructNode){
+                        StructNode newNode = (StructNode)myType;
+                        ErrMsg.fatal(newNode.getId().getLineNum(),
+                                        newNode.getId().getCharNum(),
+                                        "Invalid name of struct type");
+                    }
                     // return;
                 }
 
@@ -493,7 +504,7 @@ class FormalDeclNode extends DeclNode {
         // error report here
         if(myType.getStrVal().equals("void")){
             ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), 
-                    "Non-Function declared void");
+                    "Non-Function declared void");
         }
 
         try{
@@ -503,9 +514,11 @@ class FormalDeclNode extends DeclNode {
                         "Multiply declared identifier");
             }
             else{ // not found in local scope, add to symtable
-                TSym newSym = new TSym(myType.getStrVal());
-                newSym.setVar();
-                t.addDecl(myId.getStrVal(), newSym);
+                if(myType.getStrVal().equals("void") == false){
+                    TSym newSym = new TSym(myType.getStrVal());
+                    newSym.setVar();
+                    t.addDecl(myId.getStrVal(), newSym);
+                }
             }
 
         }
@@ -590,6 +603,9 @@ abstract class TypeNode extends ASTnode {
     // every subclass must provide a getStrVal operation 
     abstract public String getStrVal();
 
+    // public IdNode getId(){
+    //     return null;
+    // }
 }
 
 class IntNode extends TypeNode {
@@ -653,6 +669,10 @@ class StructNode extends TypeNode {
 
     public void analysis(SymTable t){
         myId.analysis(t);
+    }
+
+    public IdNode getId(){
+        return this.myId;
     }
 
     private IdNode myId;
