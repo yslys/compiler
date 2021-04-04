@@ -141,6 +141,7 @@ class ProgramNode extends ASTnode {
      */
     public void typeCheck() {
 	// TODO: Implement a type checking method for this node and its children.
+        myDeclList.typeCheck();
     }
     
     public void unparse(PrintWriter p, int indent) {
@@ -189,6 +190,15 @@ class DeclListNode extends ASTnode {
         } catch (NoSuchElementException ex) {
             System.err.println("unexpected NoSuchElementException in DeclListNode.print");
             System.exit(-1);
+        }
+    }
+
+    public void typeCheck(){
+        for(DeclNode d : myDecls){
+            // do typeCheck for FnDeclNode only
+            if(d instanceof FnDeclNode){
+                ((FnDeclNode)d).typeCheck();
+            }
         }
     }
 
@@ -261,6 +271,13 @@ class FnBodyNode extends ASTnode {
     public void unparse(PrintWriter p, int indent) {
         myDeclList.unparse(p, indent);
         myStmtList.unparse(p, indent);
+    }
+
+    /**
+     * @param t: return type of the function
+     */
+    public void typeCheck(Type t){
+        myStmtList.typeCheck(t);
     }
 
     // 2 kids  
@@ -1586,6 +1603,8 @@ class UnaryMinusNode extends UnaryExpNode {
         myExp.unparse(p, 0);
         p.print(")");
     }
+
+
 }
 
 class NotNode extends UnaryExpNode {
