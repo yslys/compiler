@@ -1,0 +1,72 @@
+int a;
+int a; // multiply declared identifier
+bool a; // multiply declared identifier
+void a; // non-function declared void + multiply declared identifier
+struct struct_a a; // invalid name of struct type + multiply declared identifier
+void a(){} //multiply declared identifier
+struct a { // multiply declared identifier
+    int x;
+};
+
+int a(int a, bool a){} // 2* multiply declared identifier
+int a(int a, bool a){} // same as the above line
+int a(int a, bool b, int c){} // multiply declared identifier
+int func(int a, bool a){} // multiply declared identifier
+int func(int x, int y){
+    int x; // multiply declared identifier
+    int y; // multiply declared identifier
+    int a;
+    bool a; // multiply declared identifier
+    void a; // non-function declared void + multiply declared identifier
+    void x; // non-function declared void + multiply declared identifier
+    
+    
+    b = a; // undeclared identifier
+    a = z; // undeclared identifier
+    unknown1 = unknown2; // 2 * undeclared identifier
+    unknown1 = unknown2 + unknown3 * unknown4; // 3 * undeclared identifier
+
+    foo_undefined(); // undeclared identifier
+    foo_undefined(unknown1, unknown2); // 3 * undeclared identifier
+    unknown = foo_undefined(unknown1, unknown2, unknown3); // 5 * undeclared identifier
+}
+
+struct errorStruct{
+    int a;
+    bool a; // multiply declared identifier
+    void a; // non-function declared void + multiply declared identifier
+    void x; // non-function declared void
+};
+
+struct A {
+    int a;
+};
+struct B {
+    struct A a;
+};
+struct C {
+    struct B b;
+};
+struct D {
+    int integer;
+    struct C c;
+};
+
+// error testing for dotaccess
+void foo() {
+    int a;
+    int b;
+    struct D r;
+    int r; // multiply declared identifier
+    
+    x = r.c.b;   // undeclared identifier
+    r = r.c.b.B; // invalid struct field name
+    r = r.c.b.B.x.a.c; // invalid struct field name
+    x = r.integer.b; // undeclared identifier + dot access of non-struct
+    r = r.integer.b.c.t; // dot access of non-struct type ONLY once
+
+    m = n.z.y; // 2 * undeclared identifier
+}
+
+struct undeclaredStruct wrongStruct;  // Invalid name of struct type
+struct wrongStruct a; // Invalid name of struct type + Multiply declared identifier
