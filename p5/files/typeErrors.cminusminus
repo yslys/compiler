@@ -1,0 +1,137 @@
+// initialization of variables functions, struct, etc.
+int i1;
+int i2;
+int i3;
+int i;
+bool b1;
+bool b2;
+bool b;
+
+int f(){}
+int f_i_ii(int a, int b){return a;}
+bool f_b_ii(int a, int b){bool x; return x;}
+int f_i_ib(int a, bool b){}
+bool f_b_bi(bool a, int b){}
+void f_ii(int a, int b){}
+void f_i(int a){}
+
+struct A {
+    int x;
+    int y;
+};
+
+struct B{
+    int a;
+    struct A sa;
+};
+
+struct A sa;
+struct B sb;
+
+// test for writes
+void write(){
+    cout << f_i_ii; // write function 
+    cout << B; // write struct name  
+    cout << sa; // write struct variable  
+    cout << f_ii(i1, i2); // write void
+    cout << true + f_ii(i1); // non-int type*2, wrong args number
+    
+}
+
+// test for reads
+void read(){
+    cin >> f_i_ii; // read function 
+    cin >> A; // read struct name  
+    cin >> sb; // read struct variable  
+    cin >> f_i; // read function
+    
+}
+
+
+// test for function call
+void fnCall(){
+    i1(); // non func
+    A(); // non func
+
+    f_i_ii(i1,i2,i3); // wrong # of args
+    f_i_ii(); // wrong # of args
+    f_b_bi(i1,i2,b1,b2);
+
+    f_i_ii(i1, b1); // actual type not match
+    f_b_bi(i1, b1); // actual type not match
+    f_i_ii(b1, b2); // actual type not match*2
+        
+}
+
+// Missing return value
+int f1_1(){return;}
+bool f1_2(){return;}
+
+// Return with a value in a void function
+void f2_1(){return b1+b2;}
+void f2_2(){return i2;}
+
+// bad return value
+bool f3_1(){return i1;}
+int f3_2(){return b1;}
+int f3_3(){return i1 == b1;} // + type mismatch
+
+
+
+// Arithmetic operator applied to non-numeric operand
+void arithmetic(){
+    i1 = i1 + b2;
+    i1 = b1 * b2;
+    i1 = i1 * f_i(i2); 
+    i2 = b1 / f_b_bi(b1, i1); // two errors
+    b2 = b2 - f_i(i1);
+    b2 = b2 - f_i_ib(i1,b1);
+    f_b_bi++;
+    f_b_bi--; 
+
+    i = ((i == b) + !(b+i)) == (b); // three errors
+    
+}
+
+
+// Relational operator applied to non-numeric operand
+void relational(){
+    i = i < b;
+    i = b > i;
+    b = i >= f_b_bi(b,i);
+    i = b <= f_i_ib(i,b);
+    i = b < sa; // two errors
+    b = i >= f_i;
+}
+
+// Logical operator applied to non-bool operand
+void logical(){
+    i = (i - i * i) || i; // two errors
+    i = i && b;
+    i = i || i; // two errors
+    b = !i && i; // two errors
+    b = !(!i && i); // two errors
+    b = b || i; 
+    b = !i;
+    b = !(!i && i) || (!b || !i); // three errors 
+}
+
+
+int aaa;
+bool bbb;
+void ffffff(){
+bbb = (!aaa + b) && (bbb < !aaa);
+}
+
+
+void typeMismatch(){
+    i = ((b == i) == b);
+
+
+    if(b+3 == i+(!b || (!i != !i))){
+        i = 3;
+    }
+}
+
+
+
