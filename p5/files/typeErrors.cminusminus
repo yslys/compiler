@@ -7,7 +7,6 @@ bool b1;
 bool b2;
 bool b;
 
-int f(){}
 int f_i_ii(int a, int b){return a;}
 bool f_b_ii(int a, int b){bool x; return x;}
 int f_i_ib(int a, bool b){}
@@ -18,6 +17,7 @@ void f_i(int a){}
 struct A {
     int x;
     int y;
+    bool sab;
 };
 
 struct B{
@@ -114,24 +114,132 @@ void logical(){
     b = b || i; 
     b = !i;
     b = !(!i && i) || (!b || !i); // three errors 
+    b = !(!i || i) && (!b && !i); // three errors 
 }
 
 
-int aaa;
-bool bbb;
-void ffffff(){
-bbb = (!aaa + b) && (bbb < !aaa);
+
+// Non-bool expression used as an if condition
+void nonBoolInIf(){
+    if( i + 3 / 4){ // non bool in if condiction
+        b1 = b2 || f_i_ib(b, i); // two errors
+    }
+
+    if(f_i_ib(i1, b1)){
+        int ii;
+        ii = !f_i(); // three errors
+
+    }else{
+        bool bb;
+        b1 = (i1 > b1 ) && (5 < i2) || (!b1 < (i1 - b2)); // three errors
+    }
+    return false; // return error
 }
 
+// Non-bool expression used as a while condition
+void nonBoolInWhile(){
+    while(f_i_ib(b1, b2) + i1){ // two errors
+        b = f_ii(i1, i2); // type mismatch
+        i1 = true + "hello"; // two errors
+    }
+    return; 
+}
 
+// Non-integer expression used as a repeat clause
+void nonIntInRepeat(){
+    repeat(b){
+        i1++; // arithmetic operator error
+        b1--; // arithmetic operator error
+    }
+}
+
+// type mismatch
 void typeMismatch(){
     i = ((b == i) == b);
 
 
-    if(b+3 == i+(!b || (!i != !i))){
+    if(b+3 == i+(!b || (!i != !i))){  // three errors
         i = 3;
     }
+    
+}
+
+// equality operator errors
+void eqErrors(){
+    i = f_ii(i,i) == f_i(i); // Equality operator applied to void functions
+    i = f_ii(i,i) != f_i(i); // Equality operator applied to void functions
+    
+    b = f_i == f_i_ib; // Equality operator applied to functions
+    b = f_i != f_i_ib; // Equality operator applied to functions
+
+    i = A == B; // Equality operator applied to struct names
+    i = B != A; // Equality operator applied to struct names
+
+    i = sa == sb; // Equality operator applied to struct variables
+    i = sa != sb; // Equality operator applied to struct variables
 }
 
 
+// 	 assignment errors
+void funAssign(){
+    f_i = f_i_ib; // Function assignment
+    A = B; //Struct name assignment
+    sa = sb; // Struct variable assignment
+}
 
+// special test for dot access
+void dotError(){
+    sa.x = sa.x || b; // Logical operator applied to non-bool operand
+    sb.sa.sab = i; // type mismatch
+}
+
+
+// given test cases + our own func_test:
+
+int aaa;
+bool bbb;
+struct S { int a; };
+struct S t;
+
+void func_test(){
+bbb = (!aaa + b) && (bbb < !aaa);
+}
+
+void f(int p1, bool p2) {
+}
+
+void main() {
+    
+
+    // some errors involving illegal operations on functions
+    aaa = f + f;
+    bbb = f == 3;
+    bbb = f > main;
+    bbb = f == f;
+
+    // some errors involving bad function calls 
+    aaa();
+    f();
+    f(5);
+    f(aaa, aaa);
+    f(t, t.a);
+    S();
+
+    // some errors involving structs 
+    t = 5;
+    t = t;
+    cin >> S;
+    t = true || 3;
+    bbb = S && t.a;
+
+    // error involving return
+    return 10;
+
+    // other type errors 
+    aaa = aaa + (!false);
+    aaa = aaa + "foo";
+    bbb = aaa;
+
+    // don't give too many or too few error messages here 
+    bbb = (aaa + true) && (bbb < true);
+}
