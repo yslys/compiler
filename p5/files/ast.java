@@ -970,21 +970,23 @@ class ReadStmtNode extends StmtNode {
     }
 
     public void typeCheck(Type unused) {
-        if(myExp.type().isFnType()){
+        Type t = myExp.type();
+        
+        if(t.isFnType()){
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
                         "Attempt to read a function");
         }
 
-        else if(myExp.type().isStructDefType()){
+        else if(t.isStructDefType()){
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
                         "Attempt to read a struct name");
         }
 
-        else if(myExp.type().isStructType()){
+        else if(t.isStructType()){
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
                         "Attempt to read a struct variable");
         }
-        
+
     }
 
     // 1 kid (actually can only be an IdNode or an ArrayExpNode)
@@ -1012,25 +1014,27 @@ class WriteStmtNode extends StmtNode {
     }
 
     public void typeCheck(Type unused) {
-        if(myExp.type().isFnType()){
+        Type t = myExp.type();
+        
+        if(t.isFnType()){
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
                         "Attempt to write a function");
         }
 
-        else if(myExp.type().isStructDefType()){
+        else if(t.isStructDefType()){
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
                         "Attempt to write a struct name");
         }
 
-        else if(myExp.type().isStructType()){
+        else if(t.isStructType()){
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
                         "Attempt to write a struct variable");
         }
 
-        else if(myExp.type().isVoidType()){
+        else if(t.isVoidType()){
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
                         "Attempt to write void");
-        }   
+        }  
     }
 
     // 1 kid
@@ -1340,8 +1344,9 @@ class ReturnStmtNode extends StmtNode {
             if(myExp != null){
                 ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
                             "Return with a value in a void function");
+                myExp.type();
             }
-            myExp.type();
+            
         }
         else{ // function does not return null
             if(myExp != null){
@@ -1742,7 +1747,7 @@ class AssignNode extends ExpNode {
         
         // check if it's errorType first
         if(lhsType.isErrorType() || rhsType.isErrorType()){   
-            return new ErrorType();
+            // return new ErrorType();
         }
         else if(lhsType.equals(rhsType) == false){
             ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Type mismatch");
@@ -1829,7 +1834,7 @@ class CallExpNode extends ExpNode {
             if(numParams != expTypeList.size()){
                 ErrMsg.fatal(myId.lineNum(), myId.charNum(), 
                              "Function call with wrong number of args");   
-                return new ErrorType();  
+                return ((FnSym)myId.sym()).getReturnType();
             }
 
             for(int i = 0; i < numParams; i++){
@@ -1838,16 +1843,11 @@ class CallExpNode extends ExpNode {
                     ErrMsg.fatal(myExpList.getExpNodes().get(i).lineNum(), 
                                  myExpList.getExpNodes().get(i).charNum(), 
                                  "Type of actual does not match type of formal");
-                    this.hasError = true;
+                    
                 }
             }
         }
-
-        if(this.hasError == false){
-            return ((FnSym)myId.sym()).getReturnType();
-        }
-
-        return new ErrorType();
+        return ((FnSym)myId.sym()).getReturnType();
     }
 
     public int lineNum(){
@@ -1861,7 +1861,6 @@ class CallExpNode extends ExpNode {
     // 2 kids  
     private IdNode myId;
     private ExpListNode myExpList;  // possibly null
-    private boolean hasError = false;
 }
 
 abstract class UnaryExpNode extends ExpNode {
@@ -1935,7 +1934,7 @@ class UnaryMinusNode extends UnaryExpNode {
 
     public Type type(){
         Type t = myExp.type();
-        if(t.isIntType() == false){
+        if(t.isIntType() == false && !t.isErrorType()){
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
                          "Arithmetic operator applied to non-numeric operand");
             return new ErrorType();
@@ -1957,7 +1956,7 @@ class NotNode extends UnaryExpNode {
 
     public Type type(){
         Type t = myExp.type();
-        if(t.isBoolType() == false){
+        if(t.isBoolType() == false && !t.isErrorType()){
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), 
                          "Logical operator applied to non-bool operand");
             return new ErrorType();
@@ -1983,26 +1982,24 @@ class PlusNode extends BinaryExpNode {
         p.print(")");
     }
 
+    // i = ((i + b) + !(b+i)) - (b);
     public Type type(){
         // System.out.println("plusnode here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         Type exp1Type = myExp1.type(); 
         Type exp2Type = myExp2.type(); 
 
-        if(exp1Type.isErrorType() || exp2Type.isErrorType()){
+        
+        if(exp1Type.isIntType() && exp2Type.isIntType()){
+            return new IntType();
         }
-        else{
-            if(exp1Type.isIntType() && exp2Type.isIntType()){
-                return new IntType();
-            }
-            
-            if (!exp1Type.isIntType()){
-                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-                            "Arithmetic operator applied to non-numeric operand");
-            }
-            if (!exp2Type.isIntType()){
-                ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
-                            "Arithmetic operator applied to non-numeric operand");
-            }
+        
+        if (!exp1Type.isIntType() && !exp1Type.isErrorType()){
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+                        "Arithmetic operator applied to non-numeric operand");
+        }
+        if (!exp2Type.isIntType() && !exp2Type.isErrorType()){
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
+                        "Arithmetic operator applied to non-numeric operand");
         }
         return new ErrorType();
     }
@@ -2025,21 +2022,18 @@ class MinusNode extends BinaryExpNode {
         Type exp1Type = myExp1.type(); 
         Type exp2Type = myExp2.type(); 
 
-        if(exp1Type.isErrorType() || exp2Type.isErrorType()){
+        
+        if(exp1Type.isIntType() && exp2Type.isIntType()){
+            return new IntType();
         }
-        else{
-            if(exp1Type.isIntType() && exp2Type.isIntType()){
-                return new IntType();
-            }
-            
-            if (!exp1Type.isIntType()){
-                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-                            "Arithmetic operator applied to non-numeric operand");
-            }
-            if (!exp2Type.isIntType()){
-                ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
-                            "Arithmetic operator applied to non-numeric operand");
-            }
+        
+        if (!exp1Type.isIntType() && !exp1Type.isErrorType()){
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+                        "Arithmetic operator applied to non-numeric operand");
+        }
+        if (!exp2Type.isIntType() && !exp2Type.isErrorType()){
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
+                        "Arithmetic operator applied to non-numeric operand");
         }
         return new ErrorType();
     }
@@ -2062,21 +2056,18 @@ class TimesNode extends BinaryExpNode {
         Type exp1Type = myExp1.type(); 
         Type exp2Type = myExp2.type(); 
 
-        if(exp1Type.isErrorType() || exp2Type.isErrorType()){
+        
+        if(exp1Type.isIntType() && exp2Type.isIntType()){
+            return new IntType();
         }
-        else{
-            if(exp1Type.isIntType() && exp2Type.isIntType()){
-                return new IntType();
-            }
-            
-            if (!exp1Type.isIntType()){
-                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-                            "Arithmetic operator applied to non-numeric operand");
-            }
-            if (!exp2Type.isIntType()){
-                ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
-                            "Arithmetic operator applied to non-numeric operand");
-            }
+        
+        if (!exp1Type.isIntType() && !exp1Type.isErrorType()){
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+                        "Arithmetic operator applied to non-numeric operand");
+        }
+        if (!exp2Type.isIntType() && !exp2Type.isErrorType()){
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
+                        "Arithmetic operator applied to non-numeric operand");
         }
         return new ErrorType();
     }
@@ -2099,21 +2090,18 @@ class DivideNode extends BinaryExpNode {
         Type exp1Type = myExp1.type(); 
         Type exp2Type = myExp2.type(); 
 
-        if(exp1Type.isErrorType() || exp2Type.isErrorType()){
+        
+        if(exp1Type.isIntType() && exp2Type.isIntType()){
+            return new IntType();
         }
-        else{
-            if(exp1Type.isIntType() && exp2Type.isIntType()){
-                return new IntType();
-            }
-            
-            if (!exp1Type.isIntType()){
-                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-                            "Arithmetic operator applied to non-numeric operand");
-            }
-            if (!exp2Type.isIntType()){
-                ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
-                            "Arithmetic operator applied to non-numeric operand");
-            }
+        
+        if (!exp1Type.isIntType() && !exp1Type.isErrorType()){
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+                        "Arithmetic operator applied to non-numeric operand");
+        }
+        if (!exp2Type.isIntType() && !exp2Type.isErrorType()){
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
+                        "Arithmetic operator applied to non-numeric operand");
         }
         return new ErrorType();
     }
@@ -2136,22 +2124,19 @@ class AndNode extends BinaryExpNode {
         Type exp1Type = myExp1.type();
         Type exp2Type = myExp2.type();
 
-        if(exp1Type.isErrorType() || exp2Type.isErrorType()){
+        if(exp1Type.isBoolType() && exp2Type.isBoolType()){
+            return new BoolType();
         }
-        else{
-            if(exp1Type.isBoolType() && exp2Type.isBoolType()){
-                return new BoolType();
-            }
-            
-            if (!exp1Type.isBoolType()){
-                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-                            "Logical operator applied to non-bool operand");
-            }
-            if (!exp2Type.isBoolType()){
-                ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
-                            "Logical operator applied to non-bool operand");
-            }
+        
+        if (!exp1Type.isBoolType() && !exp1Type.isErrorType()){
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+                        "Logical operator applied to non-bool operand");
         }
+        if (!exp2Type.isBoolType() && !exp2Type.isErrorType()){
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
+                        "Logical operator applied to non-bool operand");
+        }
+
         return new ErrorType();
     }
     
@@ -2174,22 +2159,19 @@ class OrNode extends BinaryExpNode {
         Type exp1Type = myExp1.type();
         Type exp2Type = myExp2.type();
 
-        if(exp1Type.isErrorType() || exp2Type.isErrorType()){
+        if(exp1Type.isBoolType() && exp2Type.isBoolType()){
+            return new BoolType();
         }
-        else{
-            if(exp1Type.isBoolType() && exp2Type.isBoolType()){
-                return new BoolType();
-            }
-            
-            if (!exp1Type.isBoolType()){
-                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-                            "Logical operator applied to non-bool operand");
-            }
-            if (!exp2Type.isBoolType()){
-                ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
-                            "Logical operator applied to non-bool operand");
-            }
+        
+        if (!exp1Type.isBoolType() && !exp1Type.isErrorType()){
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+                        "Logical operator applied to non-bool operand");
         }
+        if (!exp2Type.isBoolType() && !exp2Type.isErrorType()){
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
+                        "Logical operator applied to non-bool operand");
+        }
+
         return new ErrorType();
     }
 }
@@ -2306,20 +2288,16 @@ class LessNode extends BinaryExpNode {
         Type leftType = myExp1.type();
         Type rightType = myExp2.type();
 
-        if(leftType.isErrorType() || rightType.isErrorType()){
+        if(leftType.isIntType() && rightType.isIntType()){
+            return new BoolType();
         }
-        else{
-            if(leftType.isIntType() && leftType.isIntType()){
-                return new BoolType();
-            }
-            if (!leftType.isIntType()){
-                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-                            "Relational operator applied to non-numeric operand");
-            }
-            if ( !rightType.isIntType()){
-                ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
-                            "Relational operator applied to non-numeric operand");
-            }
+        if (!leftType.isIntType() && !leftType.isErrorType()){
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+                        "Relational operator applied to non-numeric operand");
+        }
+        if ( !rightType.isIntType() && !rightType.isErrorType()){
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
+                        "Relational operator applied to non-numeric operand");
         }
         return new ErrorType();
     }
@@ -2342,20 +2320,16 @@ class GreaterNode extends BinaryExpNode {
         Type leftType = myExp1.type();
         Type rightType = myExp2.type();
 
-        if(leftType.isErrorType() || rightType.isErrorType()){
+        if(leftType.isIntType() && rightType.isIntType()){
+            return new BoolType();
         }
-        else{
-            if(leftType.isIntType() && leftType.isIntType()){
-                return new BoolType();
-            }
-            if (!leftType.isIntType()){
-                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-                            "Relational operator applied to non-numeric operand");
-            }
-            if ( !rightType.isIntType()){
-                ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
-                            "Relational operator applied to non-numeric operand");
-            }
+        if (!leftType.isIntType() && !leftType.isErrorType()){
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+                        "Relational operator applied to non-numeric operand");
+        }
+        if ( !rightType.isIntType() && !rightType.isErrorType()){
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
+                        "Relational operator applied to non-numeric operand");
         }
         return new ErrorType();
     }
@@ -2378,20 +2352,16 @@ class LessEqNode extends BinaryExpNode {
         Type leftType = myExp1.type();
         Type rightType = myExp2.type();
 
-        if(leftType.isErrorType() || rightType.isErrorType()){
+        if(leftType.isIntType() && rightType.isIntType()){
+            return new BoolType();
         }
-        else{
-            if(leftType.isIntType() && leftType.isIntType()){
-                return new BoolType();
-            }
-            if (!leftType.isIntType()){
-                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-                            "Relational operator applied to non-numeric operand");
-            }
-            if ( !rightType.isIntType()){
-                ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
-                            "Relational operator applied to non-numeric operand");
-            }
+        if (!leftType.isIntType() && !leftType.isErrorType()){
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+                        "Relational operator applied to non-numeric operand");
+        }
+        if ( !rightType.isIntType() && !rightType.isErrorType()){
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
+                        "Relational operator applied to non-numeric operand");
         }
         return new ErrorType();
     }
@@ -2414,20 +2384,16 @@ class GreaterEqNode extends BinaryExpNode {
         Type leftType = myExp1.type();
         Type rightType = myExp2.type();
 
-        if(leftType.isErrorType() || rightType.isErrorType()){
+        if(leftType.isIntType() && rightType.isIntType()){
+            return new BoolType();
         }
-        else{
-            if(leftType.isIntType() && leftType.isIntType()){
-                return new BoolType();
-            }
-            if (!leftType.isIntType()){
-                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
-                            "Relational operator applied to non-numeric operand");
-            }
-            if ( !rightType.isIntType()){
-                ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
-                            "Relational operator applied to non-numeric operand");
-            }
+        if (!leftType.isIntType() && !leftType.isErrorType()){
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), 
+                        "Relational operator applied to non-numeric operand");
+        }
+        if ( !rightType.isIntType() && !rightType.isErrorType()){
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), 
+                        "Relational operator applied to non-numeric operand");
         }
         return new ErrorType();
     }
