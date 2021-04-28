@@ -161,8 +161,10 @@ class ProgramNode extends ASTnode {
         myDeclList.unparse(p, indent);
     }
 
-    public void codeGen(){
+    public void codeGen(PrintWriter p){ // p - the output file
+        Codegen.init(p);
         myDeclList.codeGen();
+        Codegen.cleanup(); // ?????????????????????????????????
     }
 
     // 1 kid
@@ -221,7 +223,12 @@ class DeclListNode extends ASTnode {
 
     public void codeGen(){
         for(DeclNode n : myDecls){
-            n.codeGen();
+            if(n instanceof FnDeclNode){
+                ((FnDeclNode)n).codeGen();
+            }
+            else if(n instanceof VarDeclNode){
+                ((VarDeclNode)n).codeGen();
+            }
         }
     }
 
@@ -294,7 +301,7 @@ class FnBodyNode extends ASTnode {
         // $fp -> ret address
         // $fp - 4 -> control link (the frame pointer)
         // thus, here we need $fp - 8 (see pdf lec20, p. 7) 
-        symTab.setOffset(-8);
+        
         myDeclList.nameAnalysis(symTab);
         myStmtList.nameAnalysis(symTab);
     }
@@ -557,7 +564,6 @@ class VarDeclNode extends DeclNode {
         Codegen.p.println(".data");
         Codegen.p.println(".align " + "4");
         Codegen.p.println("_" + myId.name() + ": .space "+ "4");
-        Codegen.p.println();
     }
 
     // 3 kids

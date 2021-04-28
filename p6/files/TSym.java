@@ -19,6 +19,14 @@ public class TSym {
     public String toString() {
         return type.toString();
     }
+
+    public int getOffset(){
+        return this.offset;
+    }
+
+    public void setOffset(int offset){
+        this.offset = offset;
+    }
 }
 
 /**
