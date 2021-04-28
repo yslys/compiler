@@ -88,6 +88,10 @@ class StructSym extends TSym {
     public IdNode getStructType() {
         return structType;
     }
+
+    public Type getType(){
+        return new StructType(structType);
+    }
 }
 
 /**
@@ -107,5 +111,9 @@ class StructDefSym extends TSym {
 
     public SymTable getSymTable() {
         return symTab;
+    }
+
+    public Type getType(){
+        return new StructDefType();
     }
 }

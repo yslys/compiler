@@ -2,77 +2,86 @@ import java.util.*;
 
 public class SymTable {
 
-  private List<HashMap<String, TSym>> list;
+    private List<HashMap<String, TSym>> list;
+    private int offset;
 
-  public SymTable() {
-    list = new LinkedList<HashMap<String, TSym>>();
-    list.add(new HashMap<String, TSym>());
-  }
-
-  public void addDecl(String name, TSym sym) throws DuplicateSymException,
-  EmptySymTableException, IllegalArgumentException {
-
-    if (name == null && sym == null) {
-      throw new IllegalArgumentException();
-    } else if (name == null) {
-      throw new IllegalArgumentException();
-    } else if (sym == null) {
-      throw new IllegalArgumentException();
+    public void setOffset(int offset) {
+        this.offset = offset;
     }
 
-    if (list.isEmpty()) {
-      throw new EmptySymTableException();
+    public int getOffset() {
+        return this.offset;
     }
 
-    HashMap<String, TSym> symTab = list.get(0);
-    if (symTab.containsKey(name)) {
-      throw new DuplicateSymException();
-    } else {
-      symTab.put(name, sym);
-    }
-  }
-
-  public void addScope() {
-    list.add(0, new HashMap<String, TSym>());
-  }
-
-  public TSym lookupLocal(String name) throws EmptySymTableException {
-    if (list.isEmpty()) {
-      throw new EmptySymTableException();
+    public SymTable() {
+        list = new LinkedList<HashMap<String, TSym>>();
+        list.add(new HashMap<String, TSym>());
     }
 
-    if (list.get(0).containsKey(name)){
-      return list.get(0).get(name);
-    } else {
-      return null;
-    }
-  }
+    public void addDecl(String name, TSym sym)
+            throws DuplicateSymException, EmptySymTableException, IllegalArgumentException {
 
-  public TSym lookupGlobal(String name) throws EmptySymTableException {
-    if (list.isEmpty()) {
-      throw new EmptySymTableException();
+        if (name == null && sym == null) {
+            throw new IllegalArgumentException();
+        } else if (name == null) {
+            throw new IllegalArgumentException();
+        } else if (sym == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (list.isEmpty()) {
+            throw new EmptySymTableException();
+        }
+
+        HashMap<String, TSym> symTab = list.get(0);
+        if (symTab.containsKey(name)) {
+            throw new DuplicateSymException();
+        } else {
+            symTab.put(name, sym);
+        }
     }
 
-    for (HashMap<String, TSym> symTab : list) {
-      if (symTab.containsKey(name)){
-        return symTab.get(name);
-      }
+    public void addScope() {
+        list.add(0, new HashMap<String, TSym>());
     }
-    return null;
-  }
 
-  public void removeScope() throws EmptySymTableException {
-    if (list.isEmpty()) {
-      throw new EmptySymTableException();
-    }
-    list.remove(0);
-  }
+    public TSym lookupLocal(String name) throws EmptySymTableException {
+        if (list.isEmpty()) {
+            throw new EmptySymTableException();
+        }
 
-  public void print() {
-    System.out.print("\nSym Table\n");
-    for (HashMap<String, TSym> symTab : list) {
-      System.out.println(symTab.toString());
+        if (list.get(0).containsKey(name)) {
+            return list.get(0).get(name);
+        } else {
+            return null;
+        }
     }
-    System.out.println();
-  }
+
+    public TSym lookupGlobal(String name) throws EmptySymTableException {
+        if (list.isEmpty()) {
+            throw new EmptySymTableException();
+        }
+
+        for (HashMap<String, TSym> symTab : list) {
+            if (symTab.containsKey(name)) {
+                return symTab.get(name);
+            }
+        }
+        return null;
+    }
+
+    public void removeScope() throws EmptySymTableException {
+        if (list.isEmpty()) {
+            throw new EmptySymTableException();
+        }
+        list.remove(0);
+    }
+
+    public void print() {
+        System.out.print("\nSym Table\n");
+        for (HashMap<String, TSym> symTab : list) {
+            System.out.println(symTab.toString());
+        }
+        System.out.println();
+    }
 }
