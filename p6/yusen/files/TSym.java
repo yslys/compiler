@@ -6,7 +6,6 @@ import java.util.*;
  */
 public class TSym {
     private Type type;
-    private int offset;
 
     public TSym(Type type) {
         this.type = type;
@@ -89,10 +88,6 @@ class StructSym extends TSym {
     public IdNode getStructType() {
         return structType;
     }
-
-    public Type getType(){
-        return new StructType(structType);
-    }
 }
 
 /**
@@ -112,9 +107,5 @@ class StructDefSym extends TSym {
 
     public SymTable getSymTable() {
         return symTab;
-    }
-
-    public Type getType(){
-        return new StructDefType();
     }
 }

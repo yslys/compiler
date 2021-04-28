@@ -134,20 +134,6 @@ class ProgramNode extends ASTnode {
     public void nameAnalysis() {
         SymTable symTab = new SymTable();
         myDeclList.nameAnalysis(symTab);
-        
-        // check if the program contains main
-        try{
-            TSym s = symTab.lookupGlobal("main");
-            // if main is not of type Function, then error
-            // if main not found, then error
-            if(s.getType().isFnType() == false || s == null){
-                ErrMsg.fatal(0, 0, "No main function");
-            }
-        }
-        catch(EmptySymTableException e){
-            System.out.println(e);
-        }
-        
     }
 
     /**
@@ -159,10 +145,6 @@ class ProgramNode extends ASTnode {
 
     public void unparse(PrintWriter p, int indent) {
         myDeclList.unparse(p, indent);
-    }
-
-    public void codeGen(){
-        myDeclList.codeGen();
     }
 
     // 1 kid
@@ -219,12 +201,6 @@ class DeclListNode extends ASTnode {
         }
     }
 
-    public void codeGen(){
-        for(DeclNode n : myDecls){
-            n.codeGen();
-        }
-    }
-
     // list of kids (DeclNodes)
     private List<DeclNode> myDecls;
 }
@@ -242,10 +218,6 @@ class FormalsListNode extends ASTnode {
      *     if there was no error, add type of formal decl to list
      */
     public List<Type> nameAnalysis(SymTable symTab) {
-        // set the offset to be 4, since each scalar variable requires 4 bytes 
-        // of storage
-        symTab.setOffset(4);
-
         List<Type> typeList = new LinkedList<Type>();
         for (FormalDeclNode node : myFormals) {
             TSym sym = node.nameAnalysis(symTab);
@@ -291,10 +263,6 @@ class FnBodyNode extends ASTnode {
      * - process the statement list
      */
     public void nameAnalysis(SymTable symTab) {
-        // $fp -> ret address
-        // $fp - 4 -> control link (the frame pointer)
-        // thus, here we need $fp - 8 (see pdf lec20, p. 7) 
-        symTab.setOffset(-8);
         myDeclList.nameAnalysis(symTab);
         myStmtList.nameAnalysis(symTab);
     }
@@ -311,9 +279,6 @@ class FnBodyNode extends ASTnode {
         myStmtList.unparse(p, indent);
     }
 
-    public void codeGen(){
-        myStmtList.codeGen();
-    }
     // 2 kids
     private DeclListNode myDeclList;
     private StmtListNode myStmtList;
@@ -347,12 +312,6 @@ class StmtListNode extends ASTnode {
         Iterator<StmtNode> it = myStmts.iterator();
         while (it.hasNext()) {
             it.next().unparse(p, indent);
-        }
-    }
-
-    public void codeGen(){
-        for(StmtNode s : myStmts){
-            s.codeGen();
         }
     }
 
@@ -414,16 +373,6 @@ class ExpListNode extends ASTnode {
         }
     }
 
-    // ExpListNode is used in fnCall, need to do in reverse order
-    public void codeGen(){
-        int len = myExps.size();
-        
-        if(len != 0){
-            for(int i = len - 1; i >= 0; i--){
-                myExps.get(i).codeGen();
-            }
-        }
-    }
     // list of kids (ExpNodes)
     private List<ExpNode> myExps;
 }
@@ -553,13 +502,6 @@ class VarDeclNode extends DeclNode {
         p.println(";");
     }
 
-    public void codeGen(){
-        Codegen.p.println(".data");
-        Codegen.p.println(".align " + "4");
-        Codegen.p.println("_" + myId.name() + ": .space "+ "4");
-        Codegen.p.println();
-    }
-
     // 3 kids
     private TypeNode myType;
     private IdNode myId;
@@ -669,10 +611,6 @@ class FnDeclNode extends DeclNode {
         p.println("}\n");
     }
 
-    public void codeGen(){
-        Codegen.p.println(".text");
-        Codegen.genLabel(myId.name());
-    }
     // 4 kids
     private TypeNode myType;
     private IdNode myId;
