@@ -84,4 +84,13 @@ public class SymTable {
         }
         System.out.println();
     }
+
+    public bool isLocal(){
+        if(list.size == 1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 }

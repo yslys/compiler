@@ -7,6 +7,7 @@ import java.util.*;
 public class TSym {
     private Type type;
     private int offset;
+    private boolean global;
 
     public TSym(Type type) {
         this.type = type;
@@ -57,6 +58,8 @@ class FnSym extends TSym {
     public int getNumParams() {
         return numParams;
     }
+
+    
 
     public List<Type> getParamTypes() {
         return paramTypes;
