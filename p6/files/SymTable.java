@@ -4,6 +4,7 @@ public class SymTable {
 
     private List<HashMap<String, TSym>> list;
     private int offset;
+    private int initialOffset = -8;
 
     public void setOffset(int offset) {
         this.offset = offset;
@@ -85,12 +86,16 @@ public class SymTable {
         System.out.println();
     }
 
-    public bool isLocal(){
-        if(list.size == 1){
-            return false;
-        }
-        else{
-            return true;
-        }
+    public int tableLength(){
+        return list.size;
+        
+    }
+
+    public void setInitialOffset(int offset){
+        this.initialOffset = offset;
+    }
+
+    public int getInitialOffset(){
+        return this.initialOffset;
     }
 }

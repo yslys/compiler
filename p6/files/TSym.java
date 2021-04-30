@@ -7,6 +7,7 @@ import java.util.*;
 public class TSym {
     private Type type;
     private int offset;
+    
     private boolean global;
 
     public TSym(Type type) {
@@ -28,6 +29,22 @@ public class TSym {
     public void setOffset(int offset){
         this.offset = offset;
     }
+
+    public void setGlobal(SymTable t){
+        if(t.tableLength == 1){
+            this.global = true;
+        }
+        else{
+            this.global =  false;
+        }
+    }
+
+    public bool getGlobal(){
+        return this.global;
+    }
+
+
+    
 }
 
 /**
