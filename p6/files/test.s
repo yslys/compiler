@@ -1,6 +1,6 @@
 	.data
-	.align2
-.numValidInputs:	.space4
+	.align 2
+.numValidInputs:	.space 4
 	.text
 _multiplyTwoNumbers:		# METHOD ENTRY
 	sw    $ra, 0($sp)	#PUSH
@@ -24,7 +24,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	mflo  $t0
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	la    $t0, $fp, 0
+	la    $t0, 0($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -46,7 +46,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	mflo  $t0
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	la    $t0, $fp, 0
+	la    $t0, 0($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -240,7 +240,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 			#FUNCTION EXIT
 _multiplyTwoNumbers_Exit:
 	lw    $ra, 0($fp)	#load return address
-	move  $t0, $fp, save control link
+	move  $t0, $fp		#save control link
 	lw    $fp, -4($fp)	#restore FP
 	move  $sp, $t0		#restore SP
 	jr    $ra
@@ -318,7 +318,7 @@ _doFactorialRecur:		# METHOD ENTRY
 			#FUNCTION EXIT
 _doFactorialRecur_Exit:
 	lw    $ra, 0($fp)	#load return address
-	move  $t0, $fp, save control link
+	move  $t0, $fp		#save control link
 	lw    $fp, -4($fp)	#restore FP
 	move  $sp, $t0		#restore SP
 	jr    $ra
@@ -335,7 +335,7 @@ _doFactorialItr:		# METHOD ENTRY
 	li    $t0, 1
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	la    $t0, $fp, 0
+	la    $t0, 0($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -346,7 +346,7 @@ _doFactorialItr:		# METHOD ENTRY
 	li    $t0, 1
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	la    $t0, $fp, 0
+	la    $t0, 0($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -385,7 +385,7 @@ _doFactorialItr:		# METHOD ENTRY
 	add   $t0, $t0, $t1
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	la    $t0, $fp, 0
+	la    $t0, 0($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -400,7 +400,7 @@ _doFactorialItr:		# METHOD ENTRY
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	jal   multiplyTwoNumbers
-	la    $t0, $fp, 0
+	la    $t0, 0($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -420,7 +420,7 @@ _doFactorialItr:		# METHOD ENTRY
 			#FUNCTION EXIT
 _doFactorialItr_Exit:
 	lw    $ra, 0($fp)	#load return address
-	move  $t0, $fp, save control link
+	move  $t0, $fp		#save control link
 	lw    $fp, -4($fp)	#restore FP
 	move  $sp, $t0		#restore SP
 	jr    $ra
@@ -434,7 +434,7 @@ _isDone:		# METHOD ENTRY
 	addu  $fp, $sp, 8
 	subu  $sp, $sp, 0
 
-	la    $t0, $fp, 0
+	la    $t0, 0($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -451,7 +451,7 @@ _isDone:		# METHOD ENTRY
 	sub   $t0, $t1, $t0
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	la    $t0, $fp, 0
+	la    $t0, 0($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -469,7 +469,7 @@ _isDone:		# METHOD ENTRY
 			#FUNCTION EXIT
 _isDone_Exit:
 	lw    $ra, 0($fp)	#load return address
-	move  $t0, $fp, save control link
+	move  $t0, $fp		#save control link
 	lw    $fp, -4($fp)	#restore FP
 	move  $sp, $t0		#restore SP
 	jr    $ra
@@ -573,7 +573,7 @@ _loopTilDone:		# METHOD ENTRY
 	syscall
 	jal   loopTilDone
 	addu  $sp, $sp, 0
-	sw    $v0, $fp
+	sw    $v0, 0($fp)
 	j     .L24
 	nop
 .L30:
@@ -581,7 +581,7 @@ _loopTilDone:		# METHOD ENTRY
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	jal   doFactorialRecur
-	la    $t0, $fp, 0
+	la    $t0, 0($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -593,7 +593,7 @@ _loopTilDone:		# METHOD ENTRY
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	jal   doFactorialItr
-	la    $t0, $fp, 0
+	la    $t0, 0($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -749,7 +749,7 @@ _loopTilDone:		# METHOD ENTRY
 			#FUNCTION EXIT
 _loopTilDone_Exit:
 	lw    $ra, 0($fp)	#load return address
-	move  $t0, $fp, save control link
+	move  $t0, $fp		#save control link
 	lw    $fp, -4($fp)	#restore FP
 	move  $sp, $t0		#restore SP
 	jr    $ra
@@ -787,7 +787,7 @@ main:		# METHOD ENTRY
 	syscall
 	jal   loopTilDone
 	addu  $sp, $sp, 0
-	sw    $v0, $fp
+	sw    $v0, 0($fp)
 	.data
 .L45:	.asciiz "Program is terminating...\n"
 	.text
@@ -802,7 +802,7 @@ main:		# METHOD ENTRY
 			#FUNCTION EXIT
 _main_Exit:
 	lw    $ra, 0($fp)	#load return address
-	move  $t0, $fp, save control link
+	move  $t0, $fp		#save control link
 	lw    $fp, -4($fp)	#restore FP
 	move  $sp, $t0		#restore SP
 	li    $v0, 10		#load exit code for syscall

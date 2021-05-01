@@ -610,8 +610,8 @@ class VarDeclNode extends DeclNode {
             // globalvariables
             if(myId.sym().getGlobal()) {
                 Codegen.p.println("\t.data");
-                Codegen.generateWithComment(".align", "", "2");
-                Codegen.generateLabeled("." + myId.name(), ".space", "", "4");  
+                Codegen.generateWithComment(".align", "", " 2");
+                Codegen.generateLabeled("." + myId.name(), ".space", "", " 4");  
             }
             // local variables
             
@@ -768,14 +768,14 @@ class FnDeclNode extends DeclNode {
         if(!myType.type().isVoidType()){
             Codegen.genLabel(retLabel);
         }
-        
+
         // Epilogue
         Codegen.generateWithComment("", "FUNCTION EXIT");
         Codegen.genLabel("_" + myId.name() + "_Exit");
 
         Codegen.generateIndexed("lw", Codegen.RA, Codegen.FP, 0, 
                                 "load return address");
-        Codegen.generate("move", Codegen.T0, Codegen.FP, "save control link");
+        Codegen.generateWithComment("move", "save control link", Codegen.T0, Codegen.FP);
         Codegen.generateIndexed("lw", Codegen.FP, Codegen.FP, -4,
                                  "restore FP");
         Codegen.generateWithComment("move", "restore SP", Codegen.SP, Codegen.T0);
@@ -1697,7 +1697,7 @@ class CallStmtNode extends StmtNode {
         Codegen.generate("addu", Codegen.SP, Codegen.SP, 4*numExps);
 
         // retrieve result (we use fp to point to the retAddr of func)
-        Codegen.generate("sw", Codegen.V0, Codegen.FP);
+        Codegen.generateIndexed("sw", Codegen.V0, Codegen.FP, 0);
     }
 
     // 1 kid
@@ -2048,7 +2048,7 @@ class IdNode extends ExpNode {
             Codegen.generate("la", Codegen.T0, "_"+myStrVal);
         }
         else{ // local variable
-            Codegen.generate("la", Codegen.T0, Codegen.FP, mySym.getOffset());
+            Codegen.generateIndexed("la", Codegen.T0, Codegen.FP, mySym.getOffset());
         }
         // push addr onto stack (sw + subu)
         Codegen.genPush(Codegen.T0);
