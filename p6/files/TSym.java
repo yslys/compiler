@@ -31,7 +31,7 @@ public class TSym {
     }
 
     public void setGlobal(SymTable t){
-        if(t.tableLength == 1){
+        if(t.tableLength() == 1){
             this.global = true;
         }
         else{
@@ -39,7 +39,7 @@ public class TSym {
         }
     }
 
-    public bool getGlobal(){
+    public boolean getGlobal(){
         return this.global;
     }
 

@@ -87,7 +87,7 @@ public class SymTable {
     }
 
     public int tableLength(){
-        return list.size;
+        return list.size();
         
     }
 
