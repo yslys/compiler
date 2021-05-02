@@ -8,7 +8,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	sw    $fp, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	addu  $fp, $sp, 8
-	subu  $sp, $sp, 12
+	subu  $sp, $sp, 0
 
 	lw    $t0, 4($fp)
 	sw    $t0, 0($sp)	#PUSH
@@ -24,7 +24,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	mflo  $t0
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	la    $t0, -8($fp)
+	la    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -54,7 +54,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	lw    $t0, 4($sp)	#POP
 	addu  $sp, $sp, 4
 	sw    $t0, 0($t1)
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t0, -12($fp)
@@ -71,7 +71,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	addu  $sp, $sp, 4
 	li    $t1, 0
 	beq   $t0, $t1, .L1
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t0, -12($fp)
@@ -93,7 +93,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	addu  $sp, $sp, 4
 	li    $t1, 0
 	beq   $t0, $t1, .L3
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t0, -12($fp)
@@ -118,7 +118,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -135,7 +135,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -157,7 +157,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -176,10 +176,10 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	addu  $sp, $sp, 4
 	li    $t1, 1
 	bne   $t0, $t1, .L11
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -193,7 +193,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	addu  $sp, $sp, 4
 	li    $t1, 1
 	beq   $t0, $t1, .L13
-	lw    $t0, -16($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	li    $t0, 1
@@ -221,7 +221,7 @@ _multiplyTwoNumbers:		# METHOD ENTRY
 	addu  $sp, $sp, 4
 	li    $t1, 1
 	bne   $t0, $t1, .L15
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $v0, 4($sp)	#POP
@@ -365,12 +365,12 @@ _doFactorialItr:		# METHOD ENTRY
 	sw    $fp, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	addu  $fp, $sp, 8
-	subu  $sp, $sp, 8
+	subu  $sp, $sp, 0
 
 	li    $t0, 1
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	la    $t0, -8($fp)
+	la    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -390,7 +390,7 @@ _doFactorialItr:		# METHOD ENTRY
 	addu  $sp, $sp, 4
 	sw    $t0, 0($t1)
 .L18:
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t0, 4($fp)
@@ -407,7 +407,7 @@ _doFactorialItr:		# METHOD ENTRY
 	addu  $sp, $sp, 4
 	li    $t1, 1
 	bne   $t0, $t1, .L19
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	li    $t0, 1
@@ -420,7 +420,7 @@ _doFactorialItr:		# METHOD ENTRY
 	add   $t0, $t0, $t1
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	la    $t0, -8($fp)
+	la    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -428,7 +428,7 @@ _doFactorialItr:		# METHOD ENTRY
 	lw    $t0, 4($sp)	#POP
 	addu  $sp, $sp, 4
 	sw    $t0, 0($t1)
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t0, -12($fp)
@@ -467,7 +467,7 @@ _isDone:		# METHOD ENTRY
 	sw    $fp, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	addu  $fp, $sp, 8
-	subu  $sp, $sp, 4
+	subu  $sp, $sp, 0
 
 	lw    $t0, 4($fp)
 	sw    $t0, 0($sp)	#PUSH
@@ -488,7 +488,7 @@ _isDone:		# METHOD ENTRY
 	seq   $t0, $t0, $t1
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	la    $t0, -8($fp)
+	la    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -513,7 +513,7 @@ _isDone:		# METHOD ENTRY
 	lw    $t0, 4($sp)	#POP
 	addu  $sp, $sp, 4
 	sw    $t0, 0($t1)
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $v0, 4($sp)	#POP
@@ -533,7 +533,7 @@ _loopTilDone:		# METHOD ENTRY
 	sw    $fp, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	addu  $fp, $sp, 8
-	subu  $sp, $sp, 4
+	subu  $sp, $sp, 0
 
 	.data
 .L20:	.asciiz "("
@@ -574,9 +574,9 @@ _loopTilDone:		# METHOD ENTRY
 	syscall
 	li    $v0, 5
 	syscall
-	sw    $v0, -8($fp)
+	sw    $v0, -12($fp)
 .L23:
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	jal   _isDone
@@ -592,7 +592,7 @@ _loopTilDone:		# METHOD ENTRY
 	addu  $sp, $sp, 4
 	li    $t1, 1
 	bne   $t0, $t1, .L24
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	li    $t0, 1
@@ -630,7 +630,7 @@ _loopTilDone:		# METHOD ENTRY
 	subu  $sp, $sp, 4
 	j     _loopTilDone_Exit
 .L25:
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	jal   _doFactorialRecur
@@ -644,13 +644,13 @@ _loopTilDone:		# METHOD ENTRY
 	lw    $t0, 4($sp)	#POP
 	addu  $sp, $sp, 4
 	sw    $t0, 0($t1)
-	lw    $t0, -8($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	jal   _doFactorialItr
 	sw    $v0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	la    $t0, -16($fp)
+	la    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -695,7 +695,7 @@ _loopTilDone:		# METHOD ENTRY
 	addu  $sp, $sp, 4
 	li    $v0, 4
 	syscall
-	lw    $t0, -16($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $a0, 4($sp)	#POP
@@ -715,7 +715,7 @@ _loopTilDone:		# METHOD ENTRY
 	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
-	lw    $t0, -16($fp)
+	lw    $t0, -12($fp)
 	sw    $t0, 0($sp)	#PUSH
 	subu  $sp, $sp, 4
 	lw    $t1, 4($sp)	#POP
@@ -812,7 +812,7 @@ _loopTilDone:		# METHOD ENTRY
 	syscall
 	li    $v0, 5
 	syscall
-	sw    $v0, -8($fp)
+	sw    $v0, -12($fp)
 	j     .L23
 .L24:
 			#FUNCTION EXIT

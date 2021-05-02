@@ -6,6 +6,9 @@ import java.util.*;
  */
 public class TSym {
     private Type type;
+    public int offset ;
+    
+    private boolean global;
 
     public TSym(Type type) {
         this.type = type;
@@ -18,6 +21,30 @@ public class TSym {
     public String toString() {
         return type.toString();
     }
+
+    public int getOffset(){
+        return this.offset;
+    }
+
+    public void setOffset(int offset){
+        this.offset = offset;
+    }
+
+    public void setGlobal(SymTable t){
+        if(t.tableLength() == 1){
+            this.global = true;
+        }
+        else{
+            this.global =  false;
+        }
+    }
+
+    public boolean getGlobal(){
+        return this.global;
+    }
+
+
+    
 }
 
 /**
@@ -48,6 +75,8 @@ class FnSym extends TSym {
     public int getNumParams() {
         return numParams;
     }
+
+    
 
     public List<Type> getParamTypes() {
         return paramTypes;
@@ -88,6 +117,10 @@ class StructSym extends TSym {
     public IdNode getStructType() {
         return structType;
     }
+
+    public Type getType(){
+        return new StructType(structType);
+    }
 }
 
 /**
@@ -107,5 +140,9 @@ class StructDefSym extends TSym {
 
     public SymTable getSymTable() {
         return symTab;
+    }
+
+    public Type getType(){
+        return new StructDefType();
     }
 }

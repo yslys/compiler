@@ -196,18 +196,22 @@ class DeclListNode extends ASTnode {
      * decls in the list.
      */
     public void nameAnalysis(SymTable symTab, SymTable globalTab) {
-        int curOffset = symTab.getInitialOffset() + 4;
-        int localSize = 0;
-        for (DeclNode node : myDecls) {
+        int curOffset = symTab.getInitialOffset();
+        
+        for (DeclNode node : myDecls) {    
             if (node instanceof VarDeclNode) {
-                ((VarDeclNode)node).nameAnalysis(symTab, globalTab);
+                TSym sym = ((VarDeclNode)node).nameAnalysis(symTab, globalTab);
+                sym.setOffset(curOffset);
+                // System.out.println(sym.getOffset());
+                // System.out.println(sym.getType().toString());
                 curOffset -= 4;
-                localSize += 4;
+                // this.localSize += 4;
             } else {
                 node.nameAnalysis(symTab);
             }
         }
         symTab.setInitialOffset(curOffset);
+        this.localSize = -8 - curOffset;
 
     }
 
@@ -246,6 +250,10 @@ class DeclListNode extends ASTnode {
     public int getLocalSize(){
         return localSize;
     }
+
+    public void incrementLocalSizeBy4(){
+        this.localSize += 4;
+    }
     // list of kids (DeclNodes)
     private List<DeclNode> myDecls;
     private int localSize;
@@ -269,13 +277,13 @@ class FormalsListNode extends ASTnode {
         int curOffset = 0;
         for (FormalDeclNode node : myFormals) {
             TSym sym = node.nameAnalysis(symTab);
-            sym.setOffset(curOffset);
             curOffset += 4;
+            sym.setOffset(curOffset);
             if (sym != null) {
                 typeList.add(sym.getType());
             }
         }
-        paramsSize = curOffset;
+        setParamsSize(curOffset);
         return typeList;
     }
 
@@ -305,6 +313,10 @@ class FormalsListNode extends ASTnode {
 
     }
 
+    public void setParamsSize(int s){
+        this.paramsSize = s;
+    }
+
     // list of kids (FormalDeclNodes)
     private List<FormalDeclNode> myFormals;
     private int paramsSize;
@@ -324,7 +336,7 @@ class FnBodyNode extends ASTnode {
      */
     public void nameAnalysis(SymTable symTab) {
         // $fp -> ret address
-        // $fp - 4 -> control link (the frame pointer)
+        // $fp - 4 -> control link (the address of frame pointer pointing to caller)
         // thus, here we need $fp - 8 (see pdf lec20, p. 7) 
         symTab.setInitialOffset(-8);
         myDeclList.nameAnalysis(symTab);
@@ -611,7 +623,7 @@ class VarDeclNode extends DeclNode {
             if(myId.sym().getGlobal()) {
                 Codegen.p.println("\t.data");
                 Codegen.generateWithComment(".align", "", " 2");
-                Codegen.generateLabeled("." + myId.name(), ".space", "", " 4");  
+                Codegen.generateLabeled("_" + myId.name(), ".space", "", " 4");  
             }
             // local variables
             
@@ -759,19 +771,20 @@ class FnDeclNode extends DeclNode {
         Codegen.p.println();
 
         // return label
-        String retLabel = Codegen.nextLabel();
+        // String retLabel = Codegen.nextLabel();
+        String exitLabel = "_" + myId.name() + "_Exit";
 
         // Body
-        myBody.codeGen(retLabel);
-
+        // myBody.codeGen(retLabel);
+        myBody.codeGen(exitLabel);
         // return label, end function, only when func has return type
-        if(!myType.type().isVoidType()){
-            Codegen.genLabel(retLabel);
-        }
+        // if(!myType.type().isVoidType()){
+        // Codegen.genLabel(retLabel);
+        // }
 
         // Epilogue
         Codegen.generateWithComment("", "FUNCTION EXIT");
-        Codegen.genLabel("_" + myId.name() + "_Exit");
+        Codegen.genLabel(exitLabel);
 
         Codegen.generateIndexed("lw", Codegen.RA, Codegen.FP, 0, 
                                 "load return address");
@@ -787,7 +800,10 @@ class FnDeclNode extends DeclNode {
         else{
             Codegen.generate("jr", Codegen.RA);
         }
-        Codegen.genLabel(myId.name());
+        
+        // if(((IdNode)myId).name().equals("main") == false){
+            // Codegen.genLabel(myId.name());
+        // }
     }
     // 4 kids
     private TypeNode myType;
@@ -1301,10 +1317,12 @@ class WriteStmtNode extends StmtNode {
 
         if(myType.isStringType()) {
             Codegen.generate("li", Codegen.V0, "4");
+            Codegen.generate("syscall");
         } else if(myType.isIntType() || myType.isBoolType()){
             Codegen.generate("li", Codegen.V0, "1");
+            Codegen.generate("syscall");
         }
-        Codegen.generate("syscall");
+        
     }
 
     // 1 kid
@@ -1366,8 +1384,10 @@ class IfStmtNode extends StmtNode {
     }
 
     public void codeGen(String retLabel){
+        // System.out.println("start if stmt node code Gen");
         // evaluate myExp, then store to t0
         myExp.codeGen(); // push
+        // System.out.println("pushed onto stack");
         Codegen.genPop(Codegen.T0); // pop to t0
 
         // load Codegen.TRUE to t1
@@ -1381,7 +1401,7 @@ class IfStmtNode extends StmtNode {
         
         // else, passthrough
         myStmtList.codeGen(retLabel);
-        Codegen.p.println("\tnop");
+        // Codegen.p.println("\tnop");
         
         // don't forget to print label of L0
         Codegen.genLabel(L0);
@@ -1495,7 +1515,7 @@ class IfElseStmtNode extends StmtNode {
         // generate code for branch L1
         Codegen.genLabel(L1);
         myElseStmtList.codeGen(retLabel);
-        Codegen.p.println("\tnop");
+        // Codegen.p.println("\tnop");
 
         // then, print the label of L0
         Codegen.genLabel(L0);
@@ -1690,14 +1710,14 @@ class CallStmtNode extends StmtNode {
     public void codeGen(String retLabel) {
         myCall.codeGen(); // end with jal ...
         
-        // get the number of params
-        int numExps = myCall.getNumExps();
+        // // get the number of params
+        // int numExps = myCall.getNumExps();
         
-        // tear down params
-        Codegen.generate("addu", Codegen.SP, Codegen.SP, 4*numExps);
+        // // tear down params
+        // Codegen.generate("addu", Codegen.SP, Codegen.SP, 4*numExps);
 
-        // retrieve result (we use fp to point to the retAddr of func)
-        Codegen.generateIndexed("sw", Codegen.V0, Codegen.FP, 0);
+        // // retrieve result (we use fp to point to the retAddr of func)
+        // Codegen.generateIndexed("sw", Codegen.V0, Codegen.FP, 0);
     }
 
     // 1 kid
@@ -1756,12 +1776,12 @@ class ReturnStmtNode extends StmtNode {
         p.println(";");
     }
 
-    public void codeGen(String exitLabel) {
-        if(myExp != null) {
+    public void codeGen(String retLabel) {
+        if(myExp != null){
             myExp.codeGen();
             Codegen.genPop(Codegen.V0); // pop the retval to v0
         }
-        Codegen.generate("j", exitLabel);
+        Codegen.generate("j", retLabel);
 	}
 
     // 1 kid
@@ -2058,6 +2078,7 @@ class IdNode extends ExpNode {
         // check if this IdNode is local variable
         if(mySym.getGlobal() == false){
             int offset = mySym.getOffset();
+            // System.out.println(offset);
             Codegen.generateIndexed("lw", Codegen.T0, Codegen.FP, offset);
         }
         else{ // global
@@ -2401,7 +2422,14 @@ class CallExpNode extends ExpNode {
         myExpList.codeGen();
 
         // jump and link to the function name
-        Codegen.generate("jal", myId.name());
+        if(!myId.name().equals("main")){
+            Codegen.generate("jal", "_"+myId.name());
+        }
+        else{
+            Codegen.generate("jal", myId.name());
+        }
+
+        Codegen.genPush(Codegen.V0);
     }
 
     public int getNumExps(){
@@ -2942,19 +2970,9 @@ class EqualsNode extends EqualityExpNode {
 
     // int comparison, string lit comparison
     public void codeGen(){
-        if(myExp1 instanceof IntLitNode && myExp2 instanceof IntLitNode){
-            myExp1.codeGen(); // push t0
-            myExp2.codeGen(); // push t1
-
-            Codegen.genPop(Codegen.T1);
-            Codegen.genPop(Codegen.T0);
-
-            // store the value in t0
-            Codegen.generate("seq", Codegen.T0, Codegen.T0, Codegen.T1);
-
-            Codegen.genPush(Codegen.T0);
-        }
-        else if(myExp1 instanceof StringLitNode && myExp2 instanceof StringLitNode){
+        // System.out.println("xxx");
+        if(myExp1 instanceof StringLitNode && myExp2 instanceof StringLitNode){
+            // System.out.println("2");
             String s1 = ((StringLitNode)myExp1).toString();
             String s2 = ((StringLitNode)myExp2).toString();
 
@@ -2969,6 +2987,20 @@ class EqualsNode extends EqualityExpNode {
             // push t0
             Codegen.genPush(Codegen.T0);
         }
+        else{
+            // System.out.println("1");
+            myExp1.codeGen(); // push t0
+            myExp2.codeGen(); // push t1
+
+            Codegen.genPop(Codegen.T1);
+            Codegen.genPop(Codegen.T0);
+
+            // store the value in t0
+            Codegen.generate("seq", Codegen.T0, Codegen.T0, Codegen.T1);
+
+            Codegen.genPush(Codegen.T0);
+        }
+        
     }
 }
 
@@ -2987,19 +3019,7 @@ class NotEqualsNode extends EqualityExpNode {
 
     // int comparison, string lit comparison
     public void codeGen(){
-        if(myExp1 instanceof IntLitNode && myExp2 instanceof IntLitNode){
-            myExp1.codeGen(); // push t0
-            myExp2.codeGen(); // push t1
-
-            Codegen.genPop(Codegen.T1);
-            Codegen.genPop(Codegen.T0);
-
-            // store the value in t0
-            Codegen.generate("sne", Codegen.T0, Codegen.T0, Codegen.T1);
-
-            Codegen.genPush(Codegen.T0);
-        }
-        else if(myExp1 instanceof StringLitNode && myExp2 instanceof StringLitNode){
+        if(myExp1 instanceof StringLitNode && myExp2 instanceof StringLitNode){
             String s1 = ((StringLitNode)myExp1).toString();
             String s2 = ((StringLitNode)myExp2).toString();
 
@@ -3014,6 +3034,19 @@ class NotEqualsNode extends EqualityExpNode {
             // push t0
             Codegen.genPush(Codegen.T0);
         }
+        else{
+            myExp1.codeGen(); // push t0
+            myExp2.codeGen(); // push t1
+
+            Codegen.genPop(Codegen.T1);
+            Codegen.genPop(Codegen.T0);
+
+            // store the value in t0
+            Codegen.generate("sne", Codegen.T0, Codegen.T0, Codegen.T1);
+
+            Codegen.genPush(Codegen.T0);
+        }
+        
     }
 }
 
